@@ -13,15 +13,14 @@
 </head>
 <body>
 
+<?php
+    $newconnection->deleteProduct();
+    $newconnection->updateProduct(); 
+?>
+
 <nav class="nav_bar">
     SARI-SARI INVENTORY SYSTEM
 </nav>
-
-<?php
-    $newconnection->deleteProduct();
-    $newconnection->updateProduct();
-        
-?>
 
 <div class="container">
     
@@ -100,25 +99,23 @@
                 <td><?php echo $row->restock_date ?></td>
 
                 <td>
-                <div class="button-container2">
-                    <!-- Edit Button -->
-                    <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
-                        data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>">
-                        <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
-                    </button>
-
-                    <?php include("edit.php") ?>
-
-                    <!-- Delete Button -->
-                    <form action="" method="POST" class="d-inline">
-                        <button class="btndelete btn btn-danger btn-sm" type="submit" value="<?php echo $row->product_id; ?>" 
-                            name="product_id">
-                            <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
+                    <div class="button-container2">
+                        <!-- Edit Button -->
+                        <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
+                            data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>">
+                            <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
                         </button>
-                    </form>
-                </div>
 
+                        <?php include_once("editModal.php") ?>
 
+                        <!-- Delete Button -->
+                        <form action="" method="POST" class="d-inline">
+                            <button class="btndelete btn btn-danger btn-sm" type="submit" value="<?php echo $row->product_id; ?>" 
+                                name="product_id">
+                                <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
 
@@ -126,8 +123,8 @@
             }
         }
         ?>
-
         </table>
+        
     </table>
 
 </div>

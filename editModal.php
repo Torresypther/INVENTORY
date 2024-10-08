@@ -11,7 +11,6 @@
 
       <div class="modal-body">
         <form class="form-update" action="" method="post">
-
           <!-- Hidden field for the user ID -->
           <input type="hidden" name="id" value="<?php echo $row->product_id; ?>>">
 
@@ -48,10 +47,10 @@
                 <input type="date" class="form-control" name="restock_date" value="<?php echo $row->restock_date; ?>" required>
             </div>
 
-          <!-- Modal Footer -->
+          <!-- Modal Footer --> 
           <div class="modal-footer">
             <button type="button" class="btnClose btn" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btnUpdate btn " name="product  ">Update User</button>
+            <button type="submit" class="btnUpdate btn " name="product">Update User</button>
           </div>
 
         </form>
