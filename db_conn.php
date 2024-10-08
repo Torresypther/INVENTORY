@@ -63,7 +63,7 @@ Class Connection {
     public function updateProduct(){
             // Check if the update form is submitted
             
-            if (isset($_POST['product'])) {
+            if (isset($_POST['update_product'])) {
                 // Retrieve data from the POST request
                 $product_id = $_POST['id'];
                 $product_name = $_POST['product_name'];
