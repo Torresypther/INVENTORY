@@ -59,13 +59,14 @@
     <link rel="stylesheet" href="index.css">
     <title>Sales Inventory</title>
     <script>
-        function clearFilters() {
-            document.getElementsByName('availability')[0].value = '';
-            document.getElementsByName('category_filter')[0].value = '';
-            document.getElementsByName('start_date')[0].value = '';
-            document.getElementsByName('end_date')[0].value = '';
-        }
+    function clearFilters() {
+        document.getElementsByName('availability')[0].value = '';
+        document.getElementsByName('category_filter')[0].value = '';
+        document.getElementsByName('start_date')[0].value = '';
+        document.getElementsByName('end_date')[0].value = '';
+        }   
     </script>
+
 </head>
 <body>
 
