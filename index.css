@@ -43,27 +43,10 @@ body{
     background-color: #04ae59; 
 }
 
-.sort_productbtn{
-    background-color: #97c3d9;
-}
-
 .add_productbtn:hover {
     background-color: #328757;
 }
 
-.sort_productbtn:hover{
-    background-color: #79b5d2;
-}
-
-.sort_dropdown {
-    padding: 10px;
-    border-radius: 15px;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    cursor: pointer;
-    height: 45px;
-}
 
 .search {
     display: flex;
@@ -140,14 +123,14 @@ body{
 .btnEdit, .btndelete {
     background-color: #04ae59; 
     color: white;
-    padding: 10px 15px;      
+    padding: 5px 15px;      
     border-radius: 10px;       
     border: none;    
     height: 45px;       
-    display: flex;               /* Use flexbox */
-    align-items: center;        /* Center vertically */
-    justify-content: center;     /* Center horizontally */
-    text-align: center;         /* Center text */
+    display: flex;         
+    align-items: center;       
+    justify-content: center;  
+    text-align: center;         
 }
 
 .btnEdit {
@@ -165,3 +148,10 @@ body{
 .btndelete:hover {
     background-color: #c82333; 
 }
+
+button.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
