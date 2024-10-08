@@ -1,53 +1,53 @@
 <?php
-require_once('db_conn.php');
+    require_once('db_conn.php');
 
-// Open database connection
-$connection = $newconnection->openConnection();
+    $connection = $newconnection->openConnection();
 
-// Handle form submissions for search and filter
-$searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
-$availability = isset($_POST['availability']) ? $_POST['availability'] : '';
-$categoryFilter = isset($_POST['category_filter']) ? $_POST['category_filter'] : '';
+    $searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
+    $availability = isset($_POST['availability']) ? $_POST['availability'] : '';
+    $categoryFilter = isset($_POST['category_filter']) ? $_POST['category_filter'] : '';
+    $startDate = isset($_POST['start_date']) ? $_POST['start_date'] : '';
+    $endDate = isset($_POST['end_date']) ? $_POST['end_date'] : '';
 
-// Base SQL query
-$sql = 'SELECT * FROM product_table WHERE 1=1';
+    $sql = 'SELECT * FROM product_table WHERE 1=1';
 
-// Add search filter if provided
-if (!empty($searchTerm)) {
-    $sql .= ' AND (product_name LIKE :searchTerm OR category LIKE :searchTerm)';
-}
+    if (!empty($searchTerm)) {
+        $sql .= ' AND (product_name LIKE :searchTerm OR category LIKE :searchTerm)';
+        }
 
-// Add availability filter
-if ($availability == 'in_stock') {
-    $sql .= ' AND quantity > 0';
-} elseif ($availability == 'out_of_stock') {
-    $sql .= ' AND quantity = 0';
-}
+    if ($availability == 'in_stock') {
+        $sql .= ' AND quantity > 0';
+    } elseif ($availability == 'out_of_stock') {
+        $sql .= ' AND quantity = 0';
+        }
 
-// Add category filter
-if (!empty($categoryFilter)) {
-    $sql .= ' AND category = :categoryFilter';
-}
+    if (!empty($categoryFilter)) {
+        $sql .= ' AND category = :categoryFilter';
+        }
 
-// Complete the SQL query
-$sql .= ' ORDER BY product_id DESC';
+    if (!empty($startDate) && !empty($endDate)) {
+        $sql .= ' AND restock_date BETWEEN :startDate AND :endDate';
+        }
 
-// Prepare the SQL statement
-$stmt = $connection->prepare($sql);
+    $sql .= ' ORDER BY product_id DESC';
 
-// Bind search term if it exists
-if (!empty($searchTerm)) {
-    $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
-}
+    $stmt = $connection->prepare($sql);
 
-// Bind category filter if it exists
-if (!empty($categoryFilter)) {
-    $stmt->bindValue(':categoryFilter', $categoryFilter);
-}
+    if (!empty($searchTerm)) {
+        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
+        }
 
-// Execute the query
-$stmt->execute();
-$result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    if (!empty($categoryFilter)) {
+        $stmt->bindValue(':categoryFilter', $categoryFilter);
+        }
+
+    if (!empty($startDate) && !empty($endDate)) {
+        $stmt->bindValue(':startDate', $startDate);
+        $stmt->bindValue(':endDate', $endDate);
+        }
+
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
@@ -58,6 +58,14 @@ $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <title>Sales Inventory</title>
+    <script>
+        function clearFilters() {
+            document.getElementsByName('availability')[0].value = '';
+            document.getElementsByName('category_filter')[0].value = '';
+            document.getElementsByName('start_date')[0].value = '';
+            document.getElementsByName('end_date')[0].value = '';
+        }
+    </script>
 </head>
 <body>
 
@@ -70,6 +78,7 @@ $newconnection->updateProduct();
 <nav class="nav_bar">
     SARI-SARI INVENTORY SYSTEM
 </nav>
+
 <div class="container">
     <!-- First half: Search input and buttons -->
     <div class="search-container">
@@ -85,33 +94,40 @@ $newconnection->updateProduct();
     </div>
 
     <!-- Second half: Filters -->
-    <div class="filters-container">
-        <form action="index.php" method="POST">
-            <div class="filters">
-                <!-- Availability Filter -->
-                <select name="availability" class="form-select">
-                    <option value="" disabled selected>Filter by Availability</option>
-                    <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
-                    <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
-                </select>
+    <!-- Second half: Filters -->
+<div class="filters-container">
+    <form action="index.php" method="POST">
+        <div class="filters">
+            <!-- Availability Filter -->
+            <select name="availability" class="form-select">
+                <option value="" disabled <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability</option>
+                <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
+                <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
+            </select>
 
-                <!-- Category Filter -->
-                <select name="category_filter" class="form-select">
-                    <option value="" disabled selected>Filter by Category</option>
-                    <option value="Kitchen Essentials" <?php echo ($categoryFilter == 'Kitchen Essentials') ? 'selected' : ''; ?>>Kitchen Essentials</option>
-                    <option value="Laundry Essentials" <?php echo ($categoryFilter == 'Laundry Essentials') ? 'selected' : ''; ?>>Laundry Essentials</option>
-                    <option value="Canned Goods" <?php echo ($categoryFilter == 'Canned Goods') ? 'selected' : ''; ?>>Canned Goods</option>
-                    <option value="Noodles" <?php echo ($categoryFilter == 'Noodles') ? 'selected' : ''; ?>>Noodles</option>
-                </select>
-            </div>
+            <!-- Category Filter -->
+            <select name="category_filter" class="form-select">
+                <option value="" disabled <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category</option>
+                <option value="Kitchen Essentials" <?php echo ($categoryFilter == 'Kitchen Essentials') ? 'selected' : ''; ?>>Kitchen Essentials</option>
+                <option value="Laundry Essentials" <?php echo ($categoryFilter == 'Laundry Essentials') ? 'selected' : ''; ?>>Laundry Essentials</option>
+                <option value="Canned Goods" <?php echo ($categoryFilter == 'Canned Goods') ? 'selected' : ''; ?>>Canned Goods</option>
+                <option value="Noodles" <?php echo ($categoryFilter == 'Noodles') ? 'selected' : ''; ?>>Noodles</option>
+            </select>
 
-            <div class="button-container">
-                <button type="submit" class="filter_button">Filter</button>
+            <!-- Date Range Filter -->
+            <div class="date-filters">
+                <input type="date" name="start_date" class="form-select" placeholder="Start Date" value="<?php echo htmlspecialchars($startDate); ?>">
+                <input type="date" name="end_date" class="form-select" placeholder="End Date" value="<?php echo htmlspecialchars($endDate); ?>">
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="button-container">
+            <button type="submit" class="filter_button">Filter</button>
+        </div>
+    </form>
 </div>
 
+</div>
 
 <div class="table-container">
     <table class="table table-hover text-center">

@@ -19,45 +19,74 @@ body{
 
 .container {
     display: flex;
-    justify-content: space-between; /* Use space-between for better alignment */
+    justify-content: space-between; /* Adjust to 'space-between' for better alignment */
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .search-container, .filters-container {
-    flex: 1; /* Allow both halves to grow equally */
+    flex: 1; 
     display: flex;
-    align-items: center; /* Center items vertically */
+    align-items: center; 
 }
 
 .search {
+    width: 450px;
     margin-right: 15px; 
-    flex: 2; /* Allow more space for the search input */
+}
+
+.search_input {
+    width: 100%; /* Set to 100% to occupy full width */
+    border-radius: 10px; 
+    border: 1px solid #ccc; 
+    padding: 8px; 
 }
 
 .filters {
     display: flex;
     gap: 10px; 
-    flex: 1; /* Flex-grow to maintain proportional width */
+    flex: 3; /* Adjusted to allow more space for filters */
+}
+
+.filters select {
+    min-width: 150px; /* Set a minimum width for the dropdowns */
+    flex: 0; /* Prevent the select from stretching */
+}
+
+.date-filters {
+    display: flex; /* Ensure the date inputs are displayed in a row */
+    gap: 10px; /* Space between the date inputs */
+}
+
+.filters input[type="date"] {
+    flex: 1; /* Each date input takes equal space */
+    border-radius: 8px; 
+    border: 1px solid #ccc; 
+    padding: 8px; /* Add padding for better usability */
 }
 
 .button-container {
     display: flex;
-    gap: 10px;
+    gap: 10px; 
+    flex: 1; /* Ensure the button container occupies space */
 }
 
 .add_productbtn, .search_button, .filter_button {
     padding: 10px 20px;
-    border-radius: 15px;
+    border-radius: 10px; 
     color: white;
     text-decoration: none;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
+    margin-top: 1rem;
+    flex: 1; /* Make buttons occupy equal space */
+    height: 45px;
+    border: none; /* Changed to 'none' for consistency */
 }
 
 .add_productbtn {
-    background-color: #04ae59; /* Green */
+    background-color: #04ae59;  
 }
 
 .add_productbtn:hover {
@@ -80,6 +109,8 @@ body{
 .filter_button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
+
+
 
 /* Optional: Additional styles for tables and other elements */
 .table-container {
