@@ -19,19 +19,35 @@ body{
 
 .container {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    justify-content: space-between; /* Use space-between for better alignment */
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.button-container {
+.search-container, .filters-container {
+    flex: 1; /* Allow both halves to grow equally */
     display: flex;
-    gap: 15px;
+    align-items: center; /* Center items vertically */
 }
 
-.add_productbtn, .sort_productbtn {
+.search {
+    margin-right: 15px; 
+    flex: 2; /* Allow more space for the search input */
+}
+
+.filters {
+    display: flex;
+    gap: 10px; 
+    flex: 1; /* Flex-grow to maintain proportional width */
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.add_productbtn, .search_button, .filter_button {
     padding: 10px 20px;
     border-radius: 15px;
     color: white;
@@ -39,49 +55,58 @@ body{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
 }
-.add_productbtn{
-    background-color: #04ae59; 
+
+.add_productbtn {
+    background-color: #04ae59; /* Green */
 }
 
 .add_productbtn:hover {
-    background-color: #328757;
-}
-
-
-.search {
-    display: flex;
-    justify-content: flex-start; 
-    align-items: center;
-    margin: 20px auto;
-}
-
-.search_input {
-    width: 450px;
-    height: 45px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    
+    background-color: #328757; /* Darker green on hover */
 }
 
 .search_button {
-    width: 100px;
-    height: 45px;
-    margin-left: 10px;
-    margin-right: 100px;
-    border: none;
-    border-radius: 15px;
-    background-color: #d18821;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s;
+    background-color: #d18821; /* Orange */
 }
 
 .search_button:hover {
-    background-color: #c3780f;
+    background-color: #c3780f; /* Darker orange on hover */
+}
+
+.filter_button {
+    background-color: #007bff; /* Blue */
+    color: white; /* Ensure text is white */
+}
+
+.filter_button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Optional: Additional styles for tables and other elements */
+.table-container {
+    margin-top: 20px; /* Space between filters and table */
+}
+
+.table {
+    width: 100%; /* Make table take full width */
+    margin-top: 10px; /* Space above the table */
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue on row hover */
+}
+
+
+.table-container {
+    margin-top: 20px; /* Space between filters and table */
+}
+
+.table {
+    width: 100%; /* Make table take full width */
+    margin-top: 10px; /* Space above the table */
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Light blue on row hover */
 }
 
 .table-container{
