@@ -10,16 +10,14 @@
 
       <div class="modal-body">
         <form class="form-update" action="index.php" method="post">
-          <!-- Hidden field for the product ID -->
+
           <input type="hidden" name="id" value="<?php echo $row->product_id; ?>">
 
-          <!-- Product Name -->
           <div class="mb-3">
             <label class="form-label">Product Name:</label>
             <input type="text" class="form-control" name="product_name" value="<?php echo htmlspecialchars($row->product_name, ENT_QUOTES); ?>" required>
           </div>
 
-          <!-- Category -->
           <div class="mb-3">
             <label class="form-label">Category:</label>
             <select class="form-select" name="category" required>
@@ -31,25 +29,21 @@
             </select>
           </div>
 
-          <!-- Unit Price -->
           <div class="mb-3">
             <label class="form-label">Unit Price:</label>
             <input type="number" class="form-control" name="unit_price" placeholder="Enter unit price" value="<?php echo htmlspecialchars($row->unit_price); ?>" min="0" step="0.01" required>
           </div>
 
-          <!-- Quantity -->
           <div class="mb-3">
             <label class="form-label">Quantity:</label>
             <input type="number" class="form-control" name="quantity" placeholder="Enter quantity" value="<?php echo htmlspecialchars($row->quantity); ?>" min="0" required>
           </div>
 
-          <!-- Restock Date -->
           <div class="mb-3">
             <label class="form-label">Restock Date:</label>
             <input type="date" class="form-control" name="restock_date" value="<?php echo htmlspecialchars($row->restock_date); ?>" required>
           </div>
 
-          <!-- Modal Footer --> 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary" name="update_product">Update Product</button>

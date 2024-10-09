@@ -63,9 +63,8 @@
 <body>
 
 <?php
-// Handle product deletion and updating actions
-$newconnection->deleteProduct();
-$newconnection->updateProduct();
+    $newconnection->deleteProduct();
+    $newconnection->updateProduct();
 ?>
 
 <nav class="nav_bar">
@@ -73,7 +72,7 @@ $newconnection->updateProduct();
 </nav>
 
 <div class="container">
-    <!-- First half: Search input and buttons -->
+
     <div class="search-container">
         <form action="index.php" method="POST">
             <div class="search">
@@ -86,18 +85,15 @@ $newconnection->updateProduct();
         </form>
     </div>
 
-    <!-- Second half: Filters -->
 <div class="filters-container">
     <form action="index.php" method="POST">
         <div class="filters">
-            <!-- Availability Filter -->
             <select name="availability" class="form-select clearFilters">
                 <option value="" disabled <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability</option>
                 <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
                 <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
             </select>
 
-            <!-- Category Filter -->
             <select name="category_filter" class="form-select">
                 <option value="" disabled <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category</option>
                 <option value="Kitchen Essentials" <?php echo ($categoryFilter == 'Kitchen Essentials') ? 'selected' : ''; ?>>Kitchen Essentials</option>
@@ -106,7 +102,6 @@ $newconnection->updateProduct();
                 <option value="Noodles" <?php echo ($categoryFilter == 'Noodles') ? 'selected' : ''; ?>>Noodles</option>
             </select>
 
-            <!-- Date Range Filter -->
             <div class="date-filters">
                 <input type="date" name="start_date" class="form-select" placeholder="Start Date" value="<?php echo htmlspecialchars($startDate); ?>">
                 <input type="date" name="end_date" class="form-select" placeholder="End Date" value="<?php echo htmlspecialchars($endDate); ?>">
@@ -156,7 +151,6 @@ $newconnection->updateProduct();
                         </button>
                         <?php include("editModal.php"); ?>
 
-                        <!-- Delete Button -->
                         <form action="" method="POST" style="display:inline;">
                             <button class="btndelete btn btn-danger btn-sm" type="submit" value="<?php echo htmlspecialchars($row->product_id); ?>"
                                 name="product_id" style="display: flex; align-items: center; justify-content: center;">
