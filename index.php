@@ -88,13 +88,13 @@
 <div class="filters-container">
     <form action="index.php" method="POST">
         <div class="filters">
-            <select name="availability" class="form-select clearFilters">
+            <select name="availability" class="drop1 form-select clearFilters">
                 <option value="" disabled <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability</option>
                 <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
                 <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
             </select>
 
-            <select name="category_filter" class="form-select">
+            <select name="category_filter" class="drop1 form-select">
                 <option value="" disabled <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category</option>
                 <option value="Kitchen Essentials" <?php echo ($categoryFilter == 'Kitchen Essentials') ? 'selected' : ''; ?>>Kitchen Essentials</option>
                 <option value="Laundry Essentials" <?php echo ($categoryFilter == 'Laundry Essentials') ? 'selected' : ''; ?>>Laundry Essentials</option>
@@ -118,7 +118,7 @@
 
 <div class="table-container">
     <table class="table table-hover text-center">
-        <thead class="table-dark">
+        <thead class="tablehead">
             <tr>
                 <th scope="col">Product ID</th>
                 <th scope="col">Product Name</th>
