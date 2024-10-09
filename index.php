@@ -48,6 +48,7 @@
 
     $stmt->execute();
     $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
 ?>
 
 <!DOCTYPE html>
@@ -58,15 +59,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <title>Sales Inventory</title>
-    <script>
-    function clearFilters() {
-        document.getElementsByName('availability')[0].value = '';
-        document.getElementsByName('category_filter')[0].value = '';
-        document.getElementsByName('start_date')[0].value = '';
-        document.getElementsByName('end_date')[0].value = '';
-        }   
-    </script>
-
 </head>
 <body>
 
@@ -95,12 +87,11 @@ $newconnection->updateProduct();
     </div>
 
     <!-- Second half: Filters -->
-    <!-- Second half: Filters -->
 <div class="filters-container">
     <form action="index.php" method="POST">
         <div class="filters">
             <!-- Availability Filter -->
-            <select name="availability" class="form-select">
+            <select name="availability" class="form-select clearFilters">
                 <option value="" disabled <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability</option>
                 <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
                 <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
