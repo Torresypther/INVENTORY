@@ -1,5 +1,6 @@
 <?php 
-    require_once('db_conn.php');    
+    require_once('db_conn.php');  
+    $categories = $newconnection->getCategories();  
 ?>
 
 <!DOCTYPE html>
@@ -31,11 +32,14 @@
         <div class="col-md-5">
             <label for="category" class="form-label">Category</label>
             <select id="category" class="form-select" name="category">
-            <option selected>Choose...</option>
-            <option value="Kitchen Essentials">Kitchen Essentials</option>
-            <option value="Laundry Essentials">Laundry Essentials</option>
-            <option value="Canned Goods">Canned Goods</option>
-            <option value="Noodles">Noodles</option>
+                <option value="">--Select Category--</option>
+                <?php
+                if (!empty($categories)) {
+                    foreach ($categories as $category) {
+                        echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
+                    }
+                }
+                ?>
             </select>
         </div>
 

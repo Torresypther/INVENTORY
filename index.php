@@ -9,7 +9,12 @@
     $startDate = isset($_POST['start_date']) ? $_POST['start_date'] : '';
     $endDate = isset($_POST['end_date']) ? $_POST['end_date'] : '';
 
-    $sql = 'SELECT * FROM product_table WHERE 1=1';
+    $sql = 'SELECT product_table.*, categories.category
+        FROM product_table
+        INNER JOIN categories 
+        ON product_table.category_id = categories.category_id
+        WHERE 1=1
+        ';
 
     if (!empty($searchTerm)) {
         $sql .= ' AND (product_name LIKE :searchTerm OR category LIKE :searchTerm)';
@@ -22,7 +27,7 @@
         }
 
     if (!empty($categoryFilter)) {
-        $sql .= ' AND category = :categoryFilter';
+        $sql .= ' AND category_id = :categoryFilter';
         }
 
     if (!empty($startDate) && !empty($endDate)) {
@@ -65,6 +70,7 @@
 <?php
     $newconnection->deleteProduct();
     $newconnection->updateProduct();
+    $newconnection->addCategory();
 ?>
 
 <nav class="nav_bar">
@@ -78,6 +84,15 @@
             <div class="search">
                 <input type="text" class="search_input" name="search" placeholder="Search..." id="search" />
             </div>
+
+            <div class="addcat">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                Add Category
+                </button>
+                <?php include 'add_category.php' ?>
+            </div>
+
             <div class="button-container">
                 <button type="submit" class="search_button">Search</button>
                 <a class="add_productbtn" href="add_product.php">Add Product</a>

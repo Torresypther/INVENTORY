@@ -38,7 +38,7 @@ Class Connection {
             try{
  
                 $connection = $this->openConnection(); 
-                $query = "INSERT INTO product_table (product_name, category, unit_price, quantity, restock_date)
+                $query = "INSERT INTO product_table (product_name, category_id, unit_price, quantity, restock_date)
                 VALUES (?,?,?,?,?)";
                 
                 $stmt = $connection->prepare($query);
@@ -49,6 +49,27 @@ Class Connection {
     
             } catch(PDOException $th) {
                 echo "Error: " . $th->getMessage();
+            }
+        }
+    }
+
+    public function addCategory(){
+        if(isset($_POST["add_category"])){
+            $categoryname = $_POST["new_category"];
+
+            try{
+
+                $connection = $this->openConnection();
+                $query = "INSERT INTO categories (category) VALUES (?)";
+
+                $stmt = $connection->prepare($query);
+                $stmt->execute([$categoryname]);
+
+                header("Location: index.php?msg=CAtegory Added");
+                exit();
+
+            }catch(PDOException $th){
+                echo "Error: " .$th->getMessage();
             }
         }
     }
@@ -114,5 +135,23 @@ Class Connection {
             }
         }
     }
+
+    public function getCategories() {
+        try {
+            $connection = $this->openConnection();
+            $query = "SELECT category_id, category FROM categories";  // Adjust column names if needed
+            $stmt = $connection->prepare($query);
+            $stmt->execute();
+            
+            // Fetch all categories as an array of objects
+            $categories = $stmt->fetchAll();
+            
+            return $categories;
+            
+        } catch (PDOException $th) {
+            echo "Error: " . $th->getMessage();
+        }
+    }
+    
 
 }
