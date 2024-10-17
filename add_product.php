@@ -1,5 +1,6 @@
 <?php 
     require_once('db_conn.php');  
+    // Tawag sa getCategories na function
     $categories = $newconnection->getCategories();  
 ?>
 
@@ -33,6 +34,7 @@
             <label for="category" class="form-label">Category</label>
             <select id="category" class="form-select" name="category">
                 <option value="">--Select Category--</option>
+                <!-- display sa data sa categories na table -->
                 <?php
                 if (!empty($categories)) {
                     foreach ($categories as $category) {

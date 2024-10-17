@@ -53,6 +53,7 @@ Class Connection {
         }
     }
 
+    // add ug bag-ong category
     public function addCategory(){
         if(isset($_POST["add_category"])){
             $categoryname = $_POST["new_category"];
@@ -136,6 +137,7 @@ Class Connection {
         }
     }
 
+    // function para fetch sa data sa table na categories sa database
     public function getCategories() {
         try {
             $connection = $this->openConnection();

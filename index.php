@@ -153,6 +153,7 @@
             <tr>
                 <td><?php echo htmlspecialchars($row->product_id) ?></td>
                 <td><?php echo htmlspecialchars($row->product_name) ?></td>
+                <!-- below kay name sa category name nimo na column sa categories na table -->
                 <td><?php echo htmlspecialchars($row->category) ?></td>
                 <td><?php echo htmlspecialchars(number_format($row->unit_price, 2)) ?></td>
                 <td><?php echo htmlspecialchars($row->quantity) ?></td>
