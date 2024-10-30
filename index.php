@@ -1,6 +1,15 @@
 <?php
-    require_once('db_conn.php');
+session_start();
+if(isset($_SESSION['username'])){
+    echo("welkam bechhh!");
+}else{
+    header("Location: login.php");
+}
+?>
 
+<?php
+    require_once('db_conn.php');
+    $categories = $newconnection->getCategories();  
     $connection = $newconnection->openConnection();
 
     $searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
@@ -13,7 +22,7 @@
         FROM product_table
         INNER JOIN categories 
         ON product_table.category_id = categories.category_id
-        WHERE 1=1
+        WHERE 1
         ';
 
     if (!empty($searchTerm)) {
@@ -27,7 +36,7 @@
         }
 
     if (!empty($categoryFilter)) {
-        $sql .= ' AND category_id = :categoryFilter';
+        $sql .= ' AND category = :categoryFilter';
         }
 
     if (!empty($startDate) && !empty($endDate)) {
@@ -87,7 +96,7 @@
 
             <div class="addcat">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+                <button type="button" class="addcat_button" data-bs-toggle="modal" data-bs-target="#addModal">
                 Add Category
                 </button>
                 <?php include 'add_category.php' ?>
@@ -96,6 +105,11 @@
             <div class="button-container">
                 <button type="submit" class="search_button">Search</button>
                 <a class="add_productbtn" href="add_product.php">Add Product</a>
+            </div>
+
+            <div class="button-container">
+                <button type="" class="logout_button">Search</button>
+                <a class="" href="terminate.php">LOG OUT BESH</a>
             </div>
         </form>
     </div>
@@ -111,10 +125,13 @@
 
             <select name="category_filter" class="drop1 form-select">
                 <option value="" disabled <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category</option>
-                <option value="Kitchen Essentials" <?php echo ($categoryFilter == 'Kitchen Essentials') ? 'selected' : ''; ?>>Kitchen Essentials</option>
-                <option value="Laundry Essentials" <?php echo ($categoryFilter == 'Laundry Essentials') ? 'selected' : ''; ?>>Laundry Essentials</option>
-                <option value="Canned Goods" <?php echo ($categoryFilter == 'Canned Goods') ? 'selected' : ''; ?>>Canned Goods</option>
-                <option value="Noodles" <?php echo ($categoryFilter == 'Noodles') ? 'selected' : ''; ?>>Noodles</option>
+                <?php
+                if (!empty($categories)) {
+                    foreach ($categories as $category) {
+                        echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
+                    }
+                }
+                ?>
             </select>
 
             <div class="date-filters">

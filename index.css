@@ -73,19 +73,21 @@ body{
     flex: 1; 
 }
 
-.add_productbtn, .search_button, .filter_button {
-    padding: 10px 20px;
+.add_productbtn, .search_button, .filter_button, .addcat_button {
+    padding: 10px 10px;
     border-radius: 10px; 
     color: white;
     text-decoration: none;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s;
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     flex: 1; 
     height: 45px;
     border: none; 
 }
-
+.addcat_button{
+    background-color: #c82333;
+}
 .add_productbtn {
     background-color: #04ae59;  
 }

@@ -10,6 +10,7 @@ Class Connection {
 
     protected $con;
 
+
     public function openConnection() {
         try {
             $this->con = new PDO($this->server, $this->user, $this->pass, $this->options);
@@ -154,6 +155,8 @@ Class Connection {
             echo "Error: " . $th->getMessage();
         }
     }
+
+
     
 
 }
