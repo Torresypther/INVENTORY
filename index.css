@@ -99,7 +99,6 @@ body{
 .search_button {
     background-color: #d18821;
 }
-
 .search_button:hover {
     background-color: #c3780f;
 }
@@ -183,3 +182,55 @@ button.btn {
     justify-content: center;
 }
 
+/* General Button Container Styles */
+.btmButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+/* Ensure uniform button dimensions */
+.button-container a, .addcat_button {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Log Out Button Specific Style */
+.button-container a {
+    background-color: #dc3545;
+}
+
+.button-container a:hover {
+    background-color: #b52a37;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Add Category Button Specific Style */
+.addcat_button {
+    background-color: #198754;
+    border: none;
+    cursor: pointer;
+}
+
+.addcat_button:hover {
+    background-color: #157347;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

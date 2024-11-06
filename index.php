@@ -1,7 +1,6 @@
 <?php
 session_start();
 if(isset($_SESSION['username'])){
-    echo("welkam bechhh!");
 }else{
     header("Location: login.php");
 }
@@ -94,22 +93,9 @@ if(isset($_SESSION['username'])){
                 <input type="text" class="search_input" name="search" placeholder="Search..." id="search" />
             </div>
 
-            <div class="addcat">
-                <!-- Button trigger modal -->
-                <button type="button" class="addcat_button" data-bs-toggle="modal" data-bs-target="#addModal">
-                Add Category
-                </button>
-                <?php include 'add_category.php' ?>
-            </div>
-
             <div class="button-container">
                 <button type="submit" class="search_button">Search</button>
                 <a class="add_productbtn" href="add_product.php">Add Product</a>
-            </div>
-
-            <div class="button-container">
-                <button type="" class="logout_button">Search</button>
-                <a class="" href="terminate.php">LOG OUT BESH</a>
             </div>
         </form>
     </div>
@@ -201,6 +187,20 @@ if(isset($_SESSION['username'])){
         ?>
         </tbody>
     </table>
+</div>
+
+<div class="btmButtons">
+    <div class="button-container">
+        <a class="" href="terminate.php">LOG OUT BESH</a>
+    </div>
+
+    <div class="addcat">
+        <!-- Button trigger modal -->
+        <button type="button" class="addcat_button" data-bs-toggle="modal" data-bs-target="#addModal">
+        ADD CATEGORY
+        </button>
+        <?php include 'add_category.php' ?>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  
