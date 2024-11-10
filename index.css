@@ -182,55 +182,39 @@ button.btn {
     justify-content: center;
 }
 
-/* General Button Container Styles */
-.btmButtons {
+.btnButtons {
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
-    padding: 20px;
-    background-color: #f1f1f1;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-    gap: 20px;
+    background-color: transparent;
+    padding: 10px;
+    margin: 100px;
 }
 
-/* Ensure uniform button dimensions */
-.button-container a, .addcat_button {
-    width: 100%;
-    max-width: 250px;
-    padding: 12px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #ffffff;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Log Out Button Specific Style */
-.button-container a {
-    background-color: #dc3545;
-}
-
-.button-container a:hover {
-    background-color: #b52a37;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Add Category Button Specific Style */
+.button-container a,
 .addcat_button {
-    background-color: #198754;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    padding: 8px 16px;
     border: none;
-    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
 }
 
+.button-container a:hover,
 .addcat_button:hover {
-    background-color: #157347;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Additional Styling */
+.button-container a {
+    margin-right: 10px;
+}
+
+.addcat {
+    display: flex;
+    align-items: center;
 }

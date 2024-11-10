@@ -64,8 +64,11 @@ if(isset($_SESSION['username'])){
     
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,136 +76,143 @@ if(isset($_SESSION['username'])){
     <link rel="stylesheet" href="index.css">
     <title>Sales Inventory</title>
 </head>
+
 <body>
 
-<?php
+    <?php
     $newconnection->deleteProduct();
     $newconnection->updateProduct();
     $newconnection->addCategory();
 ?>
 
-<nav class="nav_bar">
-    SARI-SARI INVENTORY SYSTEM
-</nav>
+    <nav class="nav_bar">
+        SARI-SARI INVENTORY SYSTEM
+    </nav>
 
-<div class="container">
+    <div class="container">
+        <div class="search-container">
+            <form action="index.php" method="POST">
+                <div class="search">
+                    <input type="text" class="search_input" name="search" placeholder="Search..." id="search" />
+                </div>
 
-    <div class="search-container">
-        <form action="index.php" method="POST">
-            <div class="search">
-                <input type="text" class="search_input" name="search" placeholder="Search..." id="search" />
-            </div>
+                <div class="button-container">
+                    <button type="submit" class="search_button">Search</button>
+                    <a class="add_productbtn" href="add_product.php">Add Product</a>
+                </div>
+            </form>
+        </div>
 
-            <div class="button-container">
-                <button type="submit" class="search_button">Search</button>
-                <a class="add_productbtn" href="add_product.php">Add Product</a>
-            </div>
-        </form>
-    </div>
+        <div class="filters-container">
+            <form action="index.php" method="POST">
+                <div class="filters">
+                    <select name="availability" class="drop1 form-select clearFilters">
+                        <option value="" <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability
+                        </option>
+                        <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock
+                        </option>
+                        <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>
+                            Out of Stock</option>
+                    </select>
 
-<div class="filters-container">
-    <form action="index.php" method="POST">
-        <div class="filters">
-            <select name="availability" class="drop1 form-select clearFilters">
-                <option value="" disabled <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability</option>
-                <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock</option>
-                <option value="out_of_stock" <?php echo ($availability == 'out_of_stock') ? 'selected' : ''; ?>>Out of Stock</option>
-            </select>
-
-            <select name="category_filter" class="drop1 form-select">
-                <option value="" disabled <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category</option>
-                <?php
+                    <select name="category_filter" class="drop1 form-select">
+                        <option value="" <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category
+                        </option>
+                        <?php
                 if (!empty($categories)) {
                     foreach ($categories as $category) {
                         echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
                     }
                 }
                 ?>
-            </select>
+                    </select>
 
-            <div class="date-filters">
-                <input type="date" name="start_date" class="form-select" placeholder="Start Date" value="<?php echo htmlspecialchars($startDate); ?>">
-                <input type="date" name="end_date" class="form-select" placeholder="End Date" value="<?php echo htmlspecialchars($endDate); ?>">
-            </div>
+                    <div class="date-filters">
+                        <input type="date" name="start_date" class="form-select" placeholder="Start Date"
+                            value="<?php echo htmlspecialchars($startDate); ?>">
+                        <input type="date" name="end_date" class="form-select" placeholder="End Date"
+                            value="<?php echo htmlspecialchars($endDate); ?>">
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" class="filter_button">Filter</button>
+                </div>
+            </form>
         </div>
 
-        <div class="button-container">
-            <button type="submit" class="filter_button">Filter</button>
-        </div>
-    </form>
-</div>
+    </div>
 
-</div>
+    <div class="table-container">
+        <table class="table table-hover text-center">
+            <thead class="tablehead">
+                <tr>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Category</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Restock Date</th>
+                    <th scope="col">Product Actions</th>
+                </tr>
+            </thead>
 
-<div class="table-container">
-    <table class="table table-hover text-center">
-        <thead class="tablehead">
-            <tr>
-                <th scope="col">Product ID</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Product Category</th>
-                <th scope="col">Unit Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Restock Date</th>
-                <th scope="col">Product Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <?php
+            <tbody>
+                <?php
         if ($result) {
             foreach ($result as $row) {
         ?>
-            <tr>
-                <td><?php echo htmlspecialchars($row->product_id) ?></td>
-                <td><?php echo htmlspecialchars($row->product_name) ?></td>
-                <!-- below kay name sa category name nimo na column sa categories na table -->
-                <td><?php echo htmlspecialchars($row->category) ?></td>
-                <td><?php echo htmlspecialchars(number_format($row->unit_price, 2)) ?></td>
-                <td><?php echo htmlspecialchars($row->quantity) ?></td>
-                <td><?php echo htmlspecialchars($row->restock_date) ?></td>
-                <td>
-                    <div class="button-container2">
-                        <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
-                            data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>"
-                            style="display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
-                        </button>
-                        <?php include("editModal.php"); ?>
-
-                        <form action="" method="POST" style="display:inline;">
-                            <button class="btndelete btn btn-danger btn-sm" type="submit" value="<?php echo htmlspecialchars($row->product_id); ?>"
-                                name="product_id" style="display: flex; align-items: center; justify-content: center;">
-                                <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
+                <tr>
+                    <td><?php echo htmlspecialchars($row->product_id) ?></td>
+                    <td><?php echo htmlspecialchars($row->product_name) ?></td>
+                    <!-- below kay name sa category name nimo na column sa categories na table -->
+                    <td><?php echo htmlspecialchars($row->category) ?></td>
+                    <td><?php echo htmlspecialchars(number_format($row->unit_price, 2)) ?></td>
+                    <td><?php echo htmlspecialchars($row->quantity) ?></td>
+                    <td><?php echo htmlspecialchars($row->restock_date) ?></td>
+                    <td>
+                        <div class="button-container2">
+                            <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
+                                data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>"
+                                style="display: flex; align-items: center; justify-content: center;">
+                                <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
                             </button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        <?php
+                            <?php include("editModal.php"); ?>
+
+                            <form action="" method="POST" style="display:inline;">
+                                <button class="btndelete btn btn-danger btn-sm" type="submit"
+                                    value="<?php echo htmlspecialchars($row->product_id); ?>" name="product_id"
+                                    style="display: flex; align-items: center; justify-content: center;">
+                                    <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <?php
             }
         } else {
             echo '<tr><td colspan="7">No products found.</td></tr>';
         }
         ?>
-        </tbody>
-    </table>
-</div>
-
-<div class="btmButtons">
-    <div class="button-container">
-        <a class="" href="terminate.php">LOG OUT BESH</a>
+            </tbody>
+        </table>
     </div>
 
-    <div class="addcat">
-        <!-- Button trigger modal -->
-        <button type="button" class="addcat_button" data-bs-toggle="modal" data-bs-target="#addModal">
-        ADD CATEGORY
-        </button>
-        <?php include 'add_category.php' ?>
-    </div>
-</div>
+    <div class="btnButtons">
+        <div class="button-container">
+            <a href="terminate.php">LOG OUT BESH</a>
+        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>  
+        <div class="addcat">
+            <button type="button" class="addcat_button" data-bs-toggle="modal" data-bs-target="#addModal">
+                ADD CATEGORY
+            </button>
+            <?php include 'add_category.php'; ?>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
