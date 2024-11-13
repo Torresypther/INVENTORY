@@ -68,18 +68,18 @@ $result = $newconnection->getItems();
     .cart-container {
         display: flex;
         justify-content: center;
-        margin-top: 2rem;
+        margin-top: 5rem;
     }
 
     .card {
-        width: 18rem;
+        width: 20rem;
     }
 
     .quantity-container {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
+        gap: 0.25rem;
+        margin-bottom: 2rem;
     }
 
     .quantity-container input {
@@ -104,7 +104,7 @@ $result = $newconnection->getItems();
 
     <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo">Brand</div>
+        <div class="logo">Hi Welcome, Buy Before you Log Out betch!</div>
         <div class="icons">
             <div class="cart">
                 <span>🛒</span>
@@ -117,60 +117,50 @@ $result = $newconnection->getItems();
         </div>
     </nav>
 
+    <?php
+        $newconnection->addCart();
+    ?>
+
     <div class="container mt-5">
         <div class="row">
             <?php
             if ($result) {
                 // Loop through each product as an object
-                while ($row = $result->fetch_object()) {
+                foreach ($result as $row) {
             ?>
             <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <!-- Display product image -->
-                    <img src="<?php echo $row->image_url; ?>" class="card-img-top"
-                        alt="<?php echo $row->product_name; ?>">
-                    <div class="card-body">
-                        <h5 class="card-title"><?php echo $row->product_name; ?></h5>
-                        <p class="card-text">Quantity: <?php echo $row->quantity; ?></p>
-                        <p class="card-text"><strong>Price:</strong> $<?php echo $row->product_price; ?></p>
+                    <div class="card h-100">
+                        <!-- Display product image -->
+                        <img src="<?php echo $row->image_url; ?>" class="card-img-top"
+                            alt="<?php echo $row->product_name; ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $row->product_name; ?></h5>
+                            <p class="card-text">Stocks Left: <?php echo $row->quantity; ?></p>
+                            <p class="card-text"><strong>Price:</strong><?php echo $row->product_price; ?>
+                            </p>
 
-                        <!-- Quantity Selector -->
-                        <div class="quantity-container mb-3">
-                            <label for="quantity-<?php echo $row->id; ?>">Quantity:</label>
-                            <input type="number" id="quantity-<?php echo $row->id; ?>" name="quantity" min="1" value="1"
-                                class="form-control">
+                        <form action="" method="post">
+                            <input type="hidden" name="product_name" value="<?php echo $row->product_name; ?>">
+                            <input type="hidden" name="price" value="<?php echo $row->product_price; ?>">
+                            <div class="quantity-container mb-3">
+                                <label for="quantity-<?php echo $row->id; ?>">Quantity:</label>
+                                <input name="quantity" type="number" id="quantity" name="quantity" min="1" value="1"
+                                    class="form-control">
+                            </div>
+                            <!-- Add to Cart Button -->
+                            <button type="submit" name="addtocart_btn">Add to Cart</button>
+                        </form>
+                            
+
                         </div>
-
-                        <!-- Add to Cart Button -->
-                        <a href="add_to_cart.php?id=<?php echo $row->id; ?>" class="btn btn-primary w-100">Add to
-                            Cart</a>
                     </div>
-                </div>
             </div>
             <?php
                 }
             } else {
                 echo "<p>No products found.</p>";
             }
-            $conn->close();
             ?>
-        </div>
-    </div>
-
-    <!-- Card Section -->
-    <div class="cart-container">
-        <div class="card">
-            <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Product Image">
-            <form action="" method="post">
-                <div class="card-body">
-                    <h5 class="card-title" name="prod_name" value="Coke">Coke</h5>
-                    <p class="card-text">Coke the refreshes heavy souls</p>
-                    <div class="quantity-container">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" min="1" value="1" class="form-control">
-                    </div>
-                    <button type="submit" name="addtocart_btn">Add to Cart</button>
-            </form>
         </div>
     </div>
 

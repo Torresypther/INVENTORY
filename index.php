@@ -1,70 +1,68 @@
 <?php
 session_start();
-if(isset($_SESSION['username'])){
-}else{
+if (isset($_SESSION['username'])) {
+} else {
     header("Location: login.php");
 }
 ?>
 
 <?php
-    require_once('db_conn.php');
-    $categories = $newconnection->getCategories();  
-    $connection = $newconnection->openConnection();
+require_once('db_conn.php');
+$categories = $newconnection->getCategories();
+$connection = $newconnection->openConnection();
 
-    $searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
-    $availability = isset($_POST['availability']) ? $_POST['availability'] : '';
-    $categoryFilter = isset($_POST['category_filter']) ? $_POST['category_filter'] : '';
-    $startDate = isset($_POST['start_date']) ? $_POST['start_date'] : '';
-    $endDate = isset($_POST['end_date']) ? $_POST['end_date'] : '';
+$searchTerm = isset($_POST['search']) ? trim($_POST['search']) : '';
+$availability = isset($_POST['availability']) ? $_POST['availability'] : '';
+$categoryFilter = isset($_POST['category_filter']) ? $_POST['category_filter'] : '';
+$startDate = isset($_POST['start_date']) ? $_POST['start_date'] : '';
+$endDate = isset($_POST['end_date']) ? $_POST['end_date'] : '';
 
-    $sql = 'SELECT product_table.*, categories.category
+$sql = 'SELECT product_table.*, categories.category
         FROM product_table
         INNER JOIN categories 
         ON product_table.category_id = categories.category_id
         WHERE 1
         ';
 
-    if (!empty($searchTerm)) {
-        $sql .= ' AND (product_name LIKE :searchTerm OR category LIKE :searchTerm)';
-        }
+if (!empty($searchTerm)) {
+    $sql .= ' AND (product_name LIKE :searchTerm OR category LIKE :searchTerm)';
+}
 
-    if ($availability == 'in_stock') {
-        $sql .= ' AND quantity > 0';
-    } elseif ($availability == 'out_of_stock') {
-        $sql .= ' AND quantity = 0';
-        }
+if ($availability == 'in_stock') {
+    $sql .= ' AND quantity > 0';
+} elseif ($availability == 'out_of_stock') {
+    $sql .= ' AND quantity = 0';
+}
 
-    if (!empty($categoryFilter)) {
-        $sql .= ' AND category = :categoryFilter';
-        }
+if (!empty($categoryFilter)) {
+    $sql .= ' AND category = :categoryFilter';
+}
 
-    if (!empty($startDate) && !empty($endDate)) {
-        $sql .= ' AND restock_date BETWEEN :startDate AND :endDate';
-        }
+if (!empty($startDate) && !empty($endDate)) {
+    $sql .= ' AND restock_date BETWEEN :startDate AND :endDate';
+}
 
-    $sql .= ' ORDER BY product_id DESC';
+$sql .= ' ORDER BY product_id DESC';
 
-    $stmt = $connection->prepare($sql);
+$stmt = $connection->prepare($sql);
 
-    if (!empty($searchTerm)) {
-        $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
-        }
+if (!empty($searchTerm)) {
+    $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%');
+}
 
-    if (!empty($categoryFilter)) {
-        $stmt->bindValue(':categoryFilter', $categoryFilter);
-        }
+if (!empty($categoryFilter)) {
+    $stmt->bindValue(':categoryFilter', $categoryFilter);
+}
 
-    if (!empty($startDate) && !empty($endDate)) {
-        $stmt->bindValue(':startDate', $startDate);
-        $stmt->bindValue(':endDate', $endDate);
-        }
+if (!empty($startDate) && !empty($endDate)) {
+    $stmt->bindValue(':startDate', $startDate);
+    $stmt->bindValue(':endDate', $endDate);
+}
 
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-    
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +81,7 @@ if(isset($_SESSION['username'])){
     $newconnection->deleteProduct();
     $newconnection->updateProduct();
     $newconnection->addCategory();
-?>
+    ?>
 
     <nav class="nav_bar">
         SARI-SARI INVENTORY SYSTEM
@@ -119,12 +117,12 @@ if(isset($_SESSION['username'])){
                         <option value="" <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category
                         </option>
                         <?php
-                if (!empty($categories)) {
-                    foreach ($categories as $category) {
-                        echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
-                    }
-                }
-                ?>
+                        if (!empty($categories)) {
+                            foreach ($categories as $category) {
+                                echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
+                            }
+                        }
+                        ?>
                     </select>
 
                     <div class="date-filters">
@@ -159,42 +157,42 @@ if(isset($_SESSION['username'])){
 
             <tbody>
                 <?php
-        if ($result) {
-            foreach ($result as $row) {
-        ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row->product_id) ?></td>
-                    <td><?php echo htmlspecialchars($row->product_name) ?></td>
-                    <!-- below kay name sa category name nimo na column sa categories na table -->
-                    <td><?php echo htmlspecialchars($row->category) ?></td>
-                    <td><?php echo htmlspecialchars(number_format($row->unit_price, 2)) ?></td>
-                    <td><?php echo htmlspecialchars($row->quantity) ?></td>
-                    <td><?php echo htmlspecialchars($row->restock_date) ?></td>
-                    <td>
-                        <div class="button-container2">
-                            <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
-                                data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>"
-                                style="display: flex; align-items: center; justify-content: center;">
-                                <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
-                            </button>
-                            <?php include("editModal.php"); ?>
+                if ($result) {
+                    foreach ($result as $row) {
+                ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row->product_id) ?></td>
+                            <td><?php echo htmlspecialchars($row->product_name) ?></td>
+                            <!-- below kay name sa category name nimo na column sa categories na table -->
+                            <td><?php echo htmlspecialchars($row->category) ?></td>
+                            <td><?php echo htmlspecialchars(number_format($row->product_price, 2)) ?></td>
+                            <td><?php echo htmlspecialchars($row->quantity) ?></td>
+                            <td><?php echo htmlspecialchars($row->restock_date) ?></td>
+                            <td>
+                                <div class="button-container2">
+                                    <button type="button" class="btnEdit btn btn-primary btn-sm" name="product"
+                                        data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row->product_id; ?>"
+                                        style="display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa-solid fa-pen-to-square fs-5 me-3"></i>Edit
+                                    </button>
+                                    <?php include("editModal.php"); ?>
 
-                            <form action="" method="POST" style="display:inline;">
-                                <button class="btndelete btn btn-danger btn-sm" type="submit"
-                                    value="<?php echo htmlspecialchars($row->product_id); ?>" name="product_id"
-                                    style="display: flex; align-items: center; justify-content: center;">
-                                    <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                                    <form action="" method="POST" style="display:inline;">
+                                        <button class="btndelete btn btn-danger btn-sm" type="submit"
+                                            value="<?php echo htmlspecialchars($row->product_id); ?>" name="product_id"
+                                            style="display: flex; align-items: center; justify-content: center;">
+                                            <i class="fa-solid fa-trash fs-5 me-3"></i>Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
                 <?php
-            }
-        } else {
-            echo '<tr><td colspan="7">No products found.</td></tr>';
-        }
-        ?>
+                    }
+                } else {
+                    echo '<tr><td colspan="7">No products found.</td></tr>';
+                }
+                ?>
             </tbody>
         </table>
     </div>

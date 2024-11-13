@@ -37,18 +37,18 @@ class Connection
 
             $productname = $_POST["name"];
             $productcategory = $_POST["category"];
-            $unit_price = $_POST["price"];
+            $price = $_POST["price"];
             $quantity = $_POST["quantity"];
             $date = $_POST["date"];
 
             try {
 
                 $connection = $this->openConnection();
-                $query = "INSERT INTO product_table (product_name, category_id, unit_price, quantity, restock_date)
+                $query = "INSERT INTO product_table (product_name, category_id, product_price, quantity, restock_date)
                 VALUES (?,?,?,?,?)";
 
                 $stmt = $connection->prepare($query);
-                $stmt->execute([$productname, $productcategory, $unit_price, $quantity, $date]);
+                $stmt->execute([$productname, $productcategory, $price, $quantity, $date]);
 
                 header("Location: index.php?msg=New record created successfully");
                 exit();
@@ -143,16 +143,14 @@ class Connection
         }
     }
 
-    // function para fetch sa data sa table na categories sa database
     public function getCategories()
     {
         try {
             $connection = $this->openConnection();
-            $query = "SELECT category_id, category FROM categories";  // Adjust column names if needed
+            $query = "SELECT category_id, category FROM categories";
             $stmt = $connection->prepare($query);
             $stmt->execute();
 
-            // Fetch all categories as an array of objects
             $categories = $stmt->fetchAll();
 
             return $categories;
@@ -194,15 +192,16 @@ class Connection
 
         if (isset($_POST['addtocart_btn'])) {
 
-            $product_name = $_POST['prod_name'];
-            $quantity = $_POST['quanity'];
+            $product_name = $_POST['product_name'];
+            $quantity = $_POST['quantity'];
             $price = $_POST['price'];
+            $totalpayable = $quantity * $price;
 
             try {
                 $connection = $this->openConnection();
-                $query = "INSERT INTO customer_cart (product_name,quantity, product_price) VALUES (?, ?, ?)";
+                $query = "INSERT INTO customer_cart (product_name, quantity, product_price, payable) VALUES (?,?,?,?)";
                 $stmt = $connection->prepare($query);
-                $stmt->execute([$product_name, $quantity, $price]);
+                $stmt->execute([$product_name, $quantity, $price, $totalpayable]);
 
                 header("Location: customer_feed.php?msg=item added to cart");
             } catch (PDOException $th) {
@@ -210,20 +209,38 @@ class Connection
             }
         }
     }
-
     public function getItems()
-    {
-        try {
-            $connection = $this->openConnection();
-            $query = "SELECT product_name, quantity, product_price FROM customer_cart";
-            $stmt = $connection->prepare($query);
-            $stmt->execute();
+    { 
+        {
+            try {
+                $connection = $this->openConnection();
+                $query = "SELECT product_name, quantity, product_price FROM product_table";
+                $stmt = $connection->prepare($query);
+                $stmt->execute();
 
-            $items = $stmt->fetchAll(PDO::FETCH_OBJ);
+                $items = $stmt->fetchAll();
 
-            return $items;
-        } catch (PDOException $th) {
-            echo "Failed to Retrieve product Data: " . $th->getMessage();
+                return $items;
+            } catch (PDOException $th) {
+                echo "Error: " . $th->getMessage();
+            }
+        }
+    }
+
+    public function getCartItems(){
+        {
+            try{
+                $connection = $this->openConnection();
+                $query = "SELECT product_name, quantity, product_price, payable FROM customer_cart";
+                $stmt = $connection->prepare($query);
+                $stmt->execute();
+
+                $items = $stmt->fetchAll();
+
+                return $items;
+            }catch(PDOException $th){
+                echo "Error: " . $th->getMessage();
+            }
         }
     }
 }
