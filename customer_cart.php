@@ -1,121 +1,197 @@
 <?php
 require_once 'db_conn.php';
-$connection = $newconnection->openConnection();
+//$connection = $newconnection->openConnection();
 $result = $newconnection->getCartItems();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Navigation Bar with Item Card</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Your Cart</title>
     <style>
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
-    body{
-        padding-bottom: 2rem;
+
+    body {
+        padding: 0;
+        padding-bottom: 4rem;
+        background-color: #fdf4ef;
     }
 
     .navbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #333;
+        background-color: #de6b48;
         padding: 1rem 2rem;
         color: white;
     }
 
     .navbar .logo {
-        font-size: 1.5rem;
+        font-size: 1.75rem;
         font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .navbar .icons {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .navbar .icons div {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    .navbar .icons span {
+        font-size: 1.3rem;
+    }
+
+    .navbar a {
+        text-decoration: none;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .navbar a:hover {
+        color: #ff9800;
     }
 
     .navbar ul {
         list-style-type: none;
         display: flex;
-        gap: 1.5rem;
+        gap: 1rem;
     }
 
-    .navbar ul li:hover, .navbar .icons div:hover {
+    .navbar ul li:hover,
+    .navbar .icons div:hover {
         color: #ff9800;
     }
 
-    .cart-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 5rem;
+    .container {
+        margin-top: 3rem;
     }
 
     .card {
         width: 100%;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .card-body {
+        padding: 1.5rem;
     }
 
     .quantity-container {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
+        gap: 0.5rem;
         margin-bottom: 1rem;
     }
 
     .quantity-container input {
-        width: 60px;
+        width: 50px;
+        height: 30px;
         text-align: center;
-    }
-
-    .btn-checkout, .btn-delete {
-        color: white;
-        transition: background-color 0.3s;
-    }
-
-    .btn-checkout {
-        background-color: #28a745;
-    }
-
-    .btn-checkout:hover {
-        background-color: #218838;
-    }
-
-    .btn-delete {
-        background-color: #dc3545;
-    }
-
-    .btn-delete:hover {
-        background-color: #c82333;
     }
 
     .actions-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-top: 1rem;
     }
 
-    .actions-container .btn-delete {
-        margin-left: auto;
+    .btn-checkout {
+        color: white;
+        background-color: #3a8e2b;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-checkout:hover {
+        background-color: #347928;
+        color: white;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        border: none;
+        padding: 0.5rem 1rem;
+        color: white;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+        color: white;
+    }
+
+    .footer-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        border-top: 1px solid #ddd;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        padding: 0.75rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .total-price {
+        font-size: 1.25rem;
+        font-weight: bold;
     }
     </style>
 </head>
-
 <body>
-
+    <?php $newconnection->deleteCartProduct(); ?>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">This is your cart!</div>
         <div class="icons">
+            <div class="homebtn">
+                <a href="customer_feed.php">Back to Feed</a>
+            </div>
             <div class="profile">
-                <span>👤</span>
-                <a href="#" style="text-decoration: none; color: white;">Profile</a>
+                <span class="bi bi-person-circle"></span>
+                <a href="#">Profile</a>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <form action="checkout.php" method="post">
+    <div class="container">
+        <form action="" method="post">
             <div class="row">
                 <?php
                 if ($result) {
@@ -125,39 +201,37 @@ $result = $newconnection->getCartItems();
                     <div class="card h-100">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="<?php echo $row->image_url; ?>" class="img-fluid rounded-start" alt="<?php echo $row->product_name; ?>">
+                                <img src="<?php echo htmlspecialchars($row->product_image); ?>" class="img-fluid rounded-start" alt="<?php echo htmlspecialchars($row->product_name); ?>">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title"><?php echo $row->product_name; ?></h5>
-                                    <p class="card-text">Stocks Left: <?php echo $row->quantity; ?></p>
-                                    <p class="card-text"><strong>Total Payable:</strong> <?php echo $row->payable; ?></p>
-
-                                    <div class="quantity-container mb-3">
-                                        <label for="quantity-<?php echo $row->id; ?>">Quantity:</label>
+                                    <h3 class="card-title"><?php echo htmlspecialchars($row->product_name); ?></h3>
+                                    <div class="quantity-container">
+                                        <label for="quantity-<?php echo $row->cart_product_id; ?>">Quantity:</label>
                                         <input type="number" 
-                                            name="quantities[<?php echo $row->id; ?>]" 
-                                            id="quantity-<?php echo $row->id; ?>" 
+                                            name="quantities[<?php echo $row->cart_product_id; ?>]" 
+                                            id="quantity-<?php echo $row->cart_product_id; ?>" 
                                             min="1" 
-                                            value="<?php echo $row->quantity; ?>" 
-                                            class="form-control">
+                                            value="<?php echo htmlspecialchars($row->quantity); ?>" 
+                                            class="form-control" required>
                                     </div>
 
-                                    <div class="actions-container">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="selected_items[]" value="<?php echo $row->id; ?>" id="select-<?php echo $row->id; ?>">
-                                            <label class="form-check-label" for="select-<?php echo $row->id; ?>">
-                                                Select for checkout
-                                            </label>
-                                        </div>
+                                    <p class="card-text"><strong>Total Payable:</strong> <?php echo htmlspecialchars($row->payable); ?></p>
 
-                                        <!-- Delete Button aligned to the right -->
-                                        <form action="delete_item.php" method="post" style="display:inline;">
-                                            <input type="hidden" name="product_id" value="<?php echo $row->id; ?>">
+                                    <div class="actions-container d-flex justify-content-start">
+                                        <!-- Checkout button for each product -->
+                                        <form action="" method="post" style="display:inline;">
+                                            <input type="hidden" name="cartproduct_id" value="<?php echo $row->cart_product_id; ?>">
+                                            <button type="submit" name="checkout_item" class="btn btn-checkout me-2">Checkout</button>
+                                        </form>
+
+                                        <!-- Delete button for each product -->
+                                        <form action="" method="post" style="display:inline;">
+                                            <input type="hidden" name="cartproduct_id" value="<?php echo $row->cart_product_id; ?>">
                                             <button type="submit" class="btn btn-delete">Delete</button>
                                         </form>
-                                    </div>
-                                    
+
+                                    </div>                               
                                 </div>
                             </div>
                         </div>
@@ -170,9 +244,10 @@ $result = $newconnection->getCartItems();
                 }
                 ?>
             </div>
-            <button type="submit" class="btn btn-checkout mt-3">Proceed to Checkout</button>
         </form>
     </div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

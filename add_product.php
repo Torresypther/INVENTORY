@@ -9,22 +9,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="add_product.css">
     <title>Add New Product</title>
 </head>
 <body>
 
+</body>
+
 <?php
-    $newconnection->addproduct();
+    $newconnection->addProduct();
 ?>
 
 <nav class="nav_bar">
     ADD NEW PRODUCT
 </nav>
 
-<div class="form-container d-flex justify-content-center" >
-    <form class="row g-3" action="" method="post">
+<div class="form-container d-flex justify-content-center">
+    <form class="row g-3" action="" method="post" enctype="multipart/form-data">
         <div class="col-md-7">
             <label for="productname" class="form-label">Product Name</label>
             <input type="text" class="form-control" id="productname" name="name" placeholder="Senorita Sardines">
@@ -34,7 +36,6 @@
             <label for="category" class="form-label">Category</label>
             <select id="category" class="form-select" name="category">
                 <option value="">--Select Category--</option>
-                <!-- display sa data sa categories na table -->
                 <?php
                 if (!empty($categories)) {
                     foreach ($categories as $category) {
@@ -60,11 +61,15 @@
             <input type="date" class="form-control" id="date" name="date">
         </div>
 
+        <div class="col-md-12">
+            <label for="image" class="form-label">Product Image</label>
+            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+        </div>
+
         <div class="col-12">
             <button type="submit" class="btnadd btn btn-primary" name="addproduct">Add New Product</button>
             <a href="index.php" class="btncancel btn btn-danger">Cancel</a>
         </div>
-
     </form>
 </div>
 

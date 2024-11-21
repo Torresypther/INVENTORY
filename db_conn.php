@@ -30,33 +30,47 @@ class Connection
         $this->con = null;
     }
 
-    public function addproduct()
-    {
+    public function addProduct()
+{
+    if (isset($_POST["addproduct"])) {
+        $productname = $_POST["name"];
+        $productcategory = $_POST["category"];
+        $price = $_POST["price"];
+        $quantity = $_POST["quantity"];
+        $date = $_POST["date"];
+        
+        $imagePath = '';
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $image = $_FILES['image'];
+            $targetDir = 'uploads/';
+            $imagePath = $targetDir . basename($image['name']);
+            
+            if (!is_dir($targetDir)) {
+                mkdir($targetDir, 0755, true);
+            }
 
-        if (isset($_POST["addproduct"])) {
-
-            $productname = $_POST["name"];
-            $productcategory = $_POST["category"];
-            $price = $_POST["price"];
-            $quantity = $_POST["quantity"];
-            $date = $_POST["date"];
-
-            try {
-
-                $connection = $this->openConnection();
-                $query = "INSERT INTO product_table (product_name, category_id, product_price, quantity, restock_date)
-                VALUES (?,?,?,?,?)";
-
-                $stmt = $connection->prepare($query);
-                $stmt->execute([$productname, $productcategory, $price, $quantity, $date]);
-
-                header("Location: index.php?msg=New record created successfully");
-                exit();
-            } catch (PDOException $th) {
-                echo "Error: " . $th->getMessage();
+            if (!move_uploaded_file($image['tmp_name'], $imagePath)) {
+                echo "Failed to upload image.";
+                return;
             }
         }
+
+        try {
+            $connection = $this->openConnection();
+            $query = "INSERT INTO product_table (product_name, category_id, product_price, stocks_left, restock_date, product_image)
+                      VALUES (?, ?, ?, ?, ?, ?)";
+
+            $stmt = $connection->prepare($query);
+            $stmt->execute([$productname, $productcategory, $price, $quantity, $date, $imagePath]);
+
+            header("Location: index.php?msg=New record created successfully");
+            exit();
+        } catch (PDOException $th) {
+            echo "Error: " . $th->getMessage();
+        }
     }
+}
+
 
     // add ug bag-ong category
     public function addCategory()
@@ -189,32 +203,40 @@ class Connection
 
     public function addCart()
     {
-
         if (isset($_POST['addtocart_btn'])) {
-
+    
+            $product_id = $_POST['product_id'];
+            $product_image = $_POST['product_image'];
             $product_name = $_POST['product_name'];
             $quantity = $_POST['quantity'];
             $price = $_POST['price'];
             $totalpayable = $quantity * $price;
-
+    
             try {
-                $connection = $this->openConnection();
-                $query = "INSERT INTO customer_cart (product_name, quantity, product_price, payable) VALUES (?,?,?,?)";
-                $stmt = $connection->prepare($query);
-                $stmt->execute([$product_name, $quantity, $price, $totalpayable]);
 
+                $connection = $this->openConnection();
+    
+                $query = "INSERT INTO customer_cart (product_id, product_name, product_image, quantity, product_price, payable) VALUES (?,?,?,?,?,?)";
+                $stmt = $connection->prepare($query);
+                $stmt->execute([$product_id, $product_name, $product_image, $quantity, $price, $totalpayable]);
+    
                 header("Location: customer_feed.php?msg=item added to cart");
+                exit();
             } catch (PDOException $th) {
                 echo "Error: " . $th->getMessage();
             }
         }
     }
+    
+    
+    
+
     public function getItems()
     { 
         {
             try {
                 $connection = $this->openConnection();
-                $query = "SELECT product_name, quantity, product_price FROM product_table";
+                $query = "SELECT * FROM product_table";
                 $stmt = $connection->prepare($query);
                 $stmt->execute();
 
@@ -231,7 +253,7 @@ class Connection
         {
             try{
                 $connection = $this->openConnection();
-                $query = "SELECT product_name, quantity, product_price, payable FROM customer_cart";
+                $query = "SELECT * FROM customer_cart";
                 $stmt = $connection->prepare($query);
                 $stmt->execute();
 
@@ -243,4 +265,28 @@ class Connection
             }
         }
     }
+
+    public function deleteCartProduct()
+    {
+        if (isset($_POST['cartproduct_id'])) {
+            $product_id = $_POST['cartproduct_id'];
+
+            try {
+                $connection = $this->openConnection();
+                $query = "DELETE FROM customer_cart WHERE cart_product_id = :product_id";
+                $stmt = $connection->prepare($query);
+
+                $query_execute = $stmt->execute(["product_id" => $product_id]);
+
+                if ($query_execute) {
+                    header("Location: customer_cart.php?msg=Product deleted successfully");
+                    exit();
+                }
+            } catch (PDOException $th) {
+                echo "Error: " . $th->getMessage();
+            }
+        }
+    }
+
+    
 }
