@@ -14,35 +14,75 @@
             box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
+        
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #eaf0f6;
+            background: linear-gradient(to right, #4e54c8, #8f94fb);
             color: #333;
         }
 
+        .navbar {
+            width: 100%;
+            padding: 15px 20px;
+            background: #4e54c8;
+            color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+            transform: scale(1.05);
+        }
+
+
         form {
-            width: 85vw;
-            max-width: 900px;
+            width: 90%;
+            max-width: 800px;
             padding: 30px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
         form h2 {
-            margin-bottom: 15px;
-            font-size: 1.5rem;
-            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #4e54c8;
             text-align: center;
         }
 
-        /* Row and input group styling */
         .form-row {
             display: flex;
             gap: 20px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .form-group {
             flex: 1;
@@ -50,44 +90,66 @@
             flex-direction: column;
         }
 
-        /* Label and input styling */
         label {
             font-size: 0.9rem;
             color: #555;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
         input, select {
-            width: 100%;
             padding: 12px;
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
             outline: none;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         input:focus, select:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+            border-color: #4e54c8;
+            box-shadow: 0 0 8px rgba(78, 84, 200, 0.2);
         }
 
-        /* Button styling */
         .submit-btn {
-            margin-top: 20px;
-            padding: 12px;
+            width: 100%;
+            padding: 15px;
             font-size: 1rem;
             color: #fff;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
         }
         .submit-btn:hover {
-            background-color: #0056b3;
+            background: linear-gradient(135deg, #3c42a0, #6a71e5);
+            box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+        }
+        .close {
+            text-align: center;
+            margin-top: 20px;
         }
 
-        /* Responsive adjustments */
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #3c42a0, #6a71e5);
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
+        }
+
+
         @media (max-width: 768px) {
             .form-row {
                 flex-direction: column;
@@ -96,28 +158,34 @@
     </style>
 </head>
 <body>
-<?php
-    $newconnection->userRegistration();
-?>
 
-  <form action="" method="post" class="userinfo">
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-title">Registration Form</span>
+            <a href="login.php" class="nav-link">Back to Login</a>
+        </div>
+    </nav>
+
+    <?php $newconnection->userRegistration(); ?>
+
+    <form action="" method="post" class="userinfo">
         <h2>User Registration</h2>
         <!-- Row 1: First Name and Last Name -->
         <div class="form-row">
             <div class="form-group">
                 <label for="firstname">First Name</label>
-                <input type="text" id="firstname" name="firstname" placeholder="First Name" required>
+                <input type="text" id="firstname" name="firstname" placeholder="Enter your first name" required>
             </div>
             <div class="form-group">
                 <label for="lastname">Last Name</label>
-                <input type="text" id="lastname" name="lastname" placeholder="Last Name" required>
+                <input type="text" id="lastname" name="lastname" placeholder="Enter your last name" required>
             </div>
         </div>
 
         <!-- Row 2: Address -->
         <div class="form-group">
             <label for="address">Address</label>
-            <input type="text" id="address" name="address" placeholder="Address">
+            <input type="text" id="address" name="address" placeholder="Enter your address">
         </div>
 
         <!-- Row 3: Birthdate and Gender -->
@@ -132,7 +200,7 @@
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Prefer not to say">Prefer not to say</option>  
+                    <option value="Prefer not to say">Prefer not to say</option>
                 </select>
             </div>
         </div>
@@ -141,19 +209,15 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Username" required>
+                <input type="text" id="username" name="username" placeholder="Choose a username" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="password" name="password" placeholder="Choose a password" required>
             </div>
         </div>
         <!-- Submit Button -->
         <button type="submit" class="submit-btn" name="register">Register</button>
-
     </form>
-    <div class="close">
-            <a href="login.php">BAck to login</a>
-        </div>
-</body>
+</>
 </html>

@@ -20,9 +20,16 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            background: linear-gradient(135deg, #f78ca0, #f6d365, #4e54c8, #8f94fb);
+            background-size: 300% 300%;
+            animation: gradient-animation 6s ease infinite;
             font-family: Arial, sans-serif;
             color: #333;
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .login-container {
             background-color: #fff;
@@ -72,6 +79,23 @@
             font-size: 0.9rem;
             color: #666;
         }
+        .toggle-password {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .toggle-password input {
+            margin-right: 0.5rem;
+        }
+        a {
+            color: #4e54c8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -85,19 +109,32 @@
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" name="password" id="password" required>
+                <div class="toggle-password">
+                    <input type="checkbox" id="show-password">
+                    <label for="show-password">Show Password</label>
+                </div>
             </div>
             <button type="submit" name="submit">Login</button>
         </form>
         <div class="footer-text">Welcome back! Please enter your credentials to continue.</div>
-
-        <div class="">
+        <div>
             <div class="registeruser">
                 <a href="register.php">Register an Account</a>
             </div>     
         </div>
-    
     </div>
-    </body>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const showPasswordCheckbox = document.getElementById('show-password');
+
+        showPasswordCheckbox.addEventListener('change', () => {
+            if (showPasswordCheckbox.checked) {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        });
+    </script>
+</body>
 </html>
-
-

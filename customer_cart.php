@@ -1,6 +1,6 @@
 <?php
 require_once 'db_conn.php';
-//$connection = $newconnection->openConnection();
+$connection = $newconnection->openConnection();
 $result = $newconnection->getCartItems();
 ?>
 
@@ -111,7 +111,7 @@ $result = $newconnection->getCartItems();
     }
 
     .quantity-container input {
-        width: 50px;
+        width: 70px;
         height: 30px;
         text-align: center;
     }
@@ -175,7 +175,10 @@ $result = $newconnection->getCartItems();
     </style>
 </head>
 <body>
-    <?php $newconnection->deleteCartProduct(); ?>
+    <?php
+        $newconnection->deleteCartProduct(); 
+        $newconnection->checkOut();
+    ?>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">This is your cart!</div>
@@ -228,7 +231,7 @@ $result = $newconnection->getCartItems();
                                         <!-- Delete button for each product -->
                                         <form action="" method="post" style="display:inline;">
                                             <input type="hidden" name="cartproduct_id" value="<?php echo $row->cart_product_id; ?>">
-                                            <button type="submit" class="btn btn-delete">Delete</button>
+                                            <button type="submit" name="btn-delete" class="btn btn-delete">Delete</button>
                                         </form>
 
                                     </div>                               
@@ -246,8 +249,6 @@ $result = $newconnection->getCartItems();
             </div>
         </form>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

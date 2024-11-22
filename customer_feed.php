@@ -220,12 +220,15 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                 <span class="bi bi-person-circle"></span>
                 <a href="#">Profile</a>
             </div>
+            <div class="logout">
+                <span class="bi bi-box-arrow-right"></span>
+                <a href="terminate.php">Logout</a>
+            </div>
         </div>
     </nav>
 
     <?php
-
-    if ($msg) {
+    if ($msg === 'added') {
         echo '<div class="alert alert-success alert-dismissible fade-out show" role="alert">
                 <i class="bi bi-check-circle"></i>
                 <strong>Item Added to Cart!</strong>
@@ -267,8 +270,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
     </div>
 </div>
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
