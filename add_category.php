@@ -1,7 +1,7 @@
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content shadow-lg rounded-3">
-      <div class="modal-header" style="background-color: #007bff; color: white;">
+      <div class="modal-header" style="background-color: #19323C; color: white;">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Category</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -23,18 +23,19 @@
 
 <style>
   .modal-dialog-centered {
-    max-width: 500px;
+    max-width: 400px;
   }
 
   .modal-content {
     border-radius: 10px;
-    background-color: #f8f9fa;
+    background-color: #F3F7F0;
     border: none;
   }
 
   .modal-header {
-    border-bottom: 2px solid #007bff;
-    padding: 20px;
+    border-bottom: 2px solid white;
+    padding: 10px;
+    
   }
 
   .modal-title {
@@ -47,15 +48,18 @@
   }
 
   .form-label {
-    font-weight: 600;
+    font-weight: 400;
+    color: #19323C;
   }
 
   .form-control {
     border-radius: 8px;
     border: 1px solid #ddd;
+    margin-top: 15px;
     padding: 12px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    height: 40px;
   }
 
   .form-control:focus {
@@ -71,21 +75,23 @@
   }
 
   .modal-footer .btn-primary {
-    background-color: #007bff;
+    background-color: #007e2e;
     border: none;
   }
 
   .modal-footer .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #00712d;
+    color: white;
   }
 
   .modal-footer .btn-secondary {
-    background-color: #6c757d;
+    background-color: #b71e1e;
     border: none;
   }
 
   .modal-footer .btn-secondary:hover {
-    background-color: #5a6268;
+    background-color: #981c1c;
+    color: white;
   }
 
   .btn-close {

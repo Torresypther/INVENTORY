@@ -37,14 +37,15 @@ if (!empty($searchTerm)) {
 }
 
 if ($availability == 'in_stock') {
-    $sql .= ' AND quantity > 0';
+    $sql .= ' AND stocks_left > 0';
 } elseif ($availability == 'out_of_stock') {
-    $sql .= ' AND quantity = 0';
+    $sql .= ' AND stocks_left = 0';
 }
 
 if (!empty($categoryFilter)) {
-    $sql .= ' AND category = :categoryFilter';
+    $sql .= ' AND product_table.category_id = :categoryFilter';
 }
+
 
 if (!empty($startDate) && !empty($endDate)) {
     $sql .= ' AND restock_date BETWEEN :startDate AND :endDate';
@@ -179,11 +180,11 @@ $result = $stmt->fetchAll(PDO::FETCH_OBJ);
     .filters {
         display: flex;
         gap: 10px;
-        flex: 3;
+        flex: 2;
     }
 
     .filters select {
-        min-width: 100px;
+        min-width: 130px;
         flex: 0;
     }
 
@@ -214,7 +215,7 @@ $result = $stmt->fetchAll(PDO::FETCH_OBJ);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s;
         margin-top: 1.2rem;
-        flex: 1;
+        flex: 1;    
         height: 45px;
         border: none;
     }
@@ -380,7 +381,7 @@ $result = $stmt->fetchAll(PDO::FETCH_OBJ);
             <form action="index.php" method="POST">
                 <div class="filters">
                     <select name="availability" class="drop1 form-select clearFilters">
-                        <option value="" <?php echo ($availability == '') ? 'selected' : ''; ?>>Filter by Availability
+                        <option value="" <?php echo ($availability == '') ? 'selected' : ''; ?>>Availability
                         </option>
                         <option value="in_stock" <?php echo ($availability == 'in_stock') ? 'selected' : ''; ?>>In Stock
                         </option>
@@ -389,15 +390,18 @@ $result = $stmt->fetchAll(PDO::FETCH_OBJ);
                     </select>
 
                     <select name="category_filter" class="drop1 form-select">
-                        <option value="" <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Filter by Category
+                        <option value="" <?php echo ($categoryFilter == '') ? 'selected' : ''; ?>>Category
                         </option>
                         <?php
-                        if (!empty($categories)) {
-                            foreach ($categories as $category) {
-                                echo '<option value="' . $category->category_id . '">' . $category->category . '</option>';
+                            if (!empty($categories)) {
+                                foreach ($categories as $category) {
+                                    echo '<option value="' . $category->category_id . '" ' . 
+                                        (($categoryFilter == $category->category_id) ? 'selected' : '') . '>' . 
+                                        $category->category . '</option>';
+                                }
                             }
-                        }
                         ?>
+
                     </select>
 
                     <div class="date-filters">

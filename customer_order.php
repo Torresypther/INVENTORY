@@ -11,16 +11,13 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         $stmt->execute();
         $orders = $stmt->fetchAll(PDO::FETCH_OBJ);
     } else {
-        header("Location: unauthorized.php"); // Redirect to an unauthorized access page
+        header("Location: unauthorized.php");
         exit();
     }
-    } else {
-        // User is not logged in
-        header("Location: login.php");
-        exit();
-    }
-
-
+} else {
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +26,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- Corrected Bootstrap Icons link -->
     <style>
         * {
             margin: 0;
@@ -39,14 +37,14 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         body {
             padding: 0;
             padding-bottom: 4rem;
-            background-color: #fdf4ef;
+            background-color: #F3F7F0;
         }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #de6b48;
+            background-color: #19323C;
             padding: 1rem 2rem;
             color: white;
         }
@@ -83,7 +81,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .navbar a:hover {
-            color: #ff9800;
+            color: #00b0ff;
         }
 
         .navbar ul {
@@ -94,7 +92,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
 
         .navbar ul li:hover,
         .navbar .icons div:hover {
-            color: #ff9800;
+            color: #00b0ff;
         }
 
         .container {
@@ -114,12 +112,12 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .table th {
-            background-color: #de6b48;
+            background-color: #19323C;
             color: white;
         }
 
         .table-hover tbody tr:hover {
-            background-color: #ff9800;
+            background-color: #00b0ff;
         }
 
         .btnButtons {
@@ -130,7 +128,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .button-container a {
-            background-color: #de6b48;
+            background-color: #1a3a5a;
             padding: 0.75rem 2rem;
             border-radius: 4px;
             color: white;
@@ -140,7 +138,7 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .button-container a:hover {
-            background-color: #da5535;
+            background-color: #004c74;
         }
 
         .footer-bar {
@@ -159,17 +157,17 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .back-btn {
-            background-color: #ff9800;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
             color: white;
             font-size: 1.1rem;
             text-decoration: none;
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
         }
 
         .back-btn:hover {
-            background-color: #f57c00;
+            color: #00b0ff;
         }
 
     </style>
@@ -178,14 +176,15 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
 <body>
 
 <nav class="navbar">
-    <div class="logo">SARI-SARI INVENTORY SYSTEM</div>
+    <div class="logo">CUSTOMER ORDERS</div>
     <div class="icons">
-        <a href="javascript:history.back()" class="back-btn">Back</a>
+        <a href="javascript:history.back()" class="back-btn">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
     </div>
 </nav>
 
 <div class="container">
-    <h2 class="my-4 text-center">Customer Orders</h2>
 
     <table class="table table-hover">
         <thead>
@@ -220,3 +219,4 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
