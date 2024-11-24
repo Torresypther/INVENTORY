@@ -1,9 +1,28 @@
 <?php
+session_start();
+
+if (isset($_SESSION['username']) && isset($_SESSION['role']) && isset($_SESSION['user_image'])) {
+    if ($_SESSION['role'] === 'customer') {
+
+    } else {
+        header("Location: unauthorized.php");
+        exit();
+    }
+} else {
+    header("Location: login.php");
+    exit();
+}
+
 require_once 'db_conn.php';
+
 $connection = $newconnection->openConnection();
 $newconnection->addCart();
 $result = $newconnection->getItems();
 $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
+
+$username = $_SESSION['username'];
+$role = $_SESSION['role'];
+$user_image = $_SESSION['user_image'];
 ?>
 
 <!DOCTYPE html>
@@ -205,6 +224,38 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
         }
     }
 
+    /* Style for the profile popup */
+    .profile-popup {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 8px;
+        width: 220px;
+        display: none;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 9999;  
+    }
+
+    .profile-popup p {
+        margin: 0.5rem 0;
+    }
+
+    .profile-image-container {
+    text-align: center;
+    margin-bottom: 1rem;
+    }
+
+    .profile-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
+
     </style>
 </head>
 <body>
@@ -216,7 +267,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                 <span class="bi bi-cart"></span>
                 <a href="customer_cart.php">Cart</a>
             </div>
-            <div class="profile">
+            <div class="profile" onclick="toggleProfilePopup()">
                 <span class="bi bi-person-circle"></span>
                 <a href="#">Profile</a>
             </div>
@@ -226,6 +277,16 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
             </div>
         </div>
     </nav>
+
+    <div class="profile-popup" id="profile-popup">
+        <h4>User Profile</h4>
+        <div class="profile-image-container">
+            <img src="<?php echo $user_image; ?>" alt="Profile Picture" class="profile-img" />
+        </div>
+        <p><strong>Username:</strong> <?php echo $username; ?></p>
+        <p><strong>Role:</strong> <?php echo $role; ?></p>
+    </div>
+
 
     <?php
     if ($msg === 'added') {
@@ -257,7 +318,7 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
                             <input type="hidden" name="product_name" value="<?php echo $row->product_name; ?>">
                             <input type="hidden" name="price" value="<?php echo $row->product_price; ?>">
                             <input type="hidden" name="product_id" value="<?php echo $row->product_id; ?>">
-                            <!-- Submit button sends quantity directly -->
+
                             <button type="submit" name="addtocart_btn" class="btn-add-to-cart">Add to Cart</button>
                         </form>
                     </div>
@@ -271,6 +332,12 @@ $msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function toggleProfilePopup() {
+        var popup = document.getElementById('profile-popup');
+        popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+    }
+    </script>
 
 </body>
 </html>

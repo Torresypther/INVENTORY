@@ -184,21 +184,39 @@ class Connection
             $gender = $_POST['gender'];
             $username = $_POST['username'];
             $password = $_POST['password'];
-
+        
+            $imagePath = '';
+        
+            if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+                $image = $_FILES['profile_image'];
+                $targetDir = 'uploads/';
+                $imagePath = $targetDir . basename($image['name']);
+                
+                if (!is_dir($targetDir)) {
+                    mkdir($targetDir, 0755, true);
+                }
+        
+                if (!move_uploaded_file($image['tmp_name'], $imagePath)) {
+                    echo "Failed to upload image.";
+                    return;
+                }           
+        
+            }
+        
             try {
-
                 $connection = $this->openConnection();
-                $query = "INSERT INTO user_data (first_name, last_name, address, birthdate, gender, username, password, date_created) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
+                $query = "INSERT INTO user_data (user_image, first_name, last_name, address, birthdate, gender, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
                 $stmt = $connection->prepare($query);
-                $stmt->execute([$firstname, $lastname, $address, $birthdate, $gender, $username, $password]);
-
+                $stmt->execute([$imagePath, $firstname, $lastname, $address, $birthdate, $gender, $username, $password]);
+        
                 header("Location: login.php?msg=User Registration Successfully");
                 exit();
             } catch (PDOException $th) {
                 echo "Error: " . $th->getMessage();
             }
         }
+        
     }
 
     public function addCart()

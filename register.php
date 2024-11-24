@@ -1,5 +1,10 @@
 <?php 
-    require_once('db_conn.php');  
+ob_start();
+require_once('db_conn.php');  
+
+if (isset($_POST['register'])) {
+    $newconnection->userRegistration();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,169 +13,232 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(to right, #4e54c8, #8f94fb);
-            color: #333;
-        }
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
-        .navbar {
-            width: 100%;
-            padding: 15px 20px;
-            background: #4e54c8;
-            color: #fff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e0f7fa;
+    color: #333;
+    padding: 20px;
+}
 
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+.navbar {
+    width: 100%;
+    padding: 15px 20px;
+    background: #4e54c8;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
 
-        .nav-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
-        .nav-link {
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-        }
+.nav-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
 
-        .nav-link:hover {
-            opacity: 0.7;
-            transform: scale(1.05);
-        }
+.nav-link {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
 
+.nav-link:hover {
+    opacity: 0.7;
+    transform: scale(1.05);
+}
 
-        form {
-            width: 90%;
-            max-width: 800px;
-            padding: 30px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-        form h2 {
-            margin-bottom: 20px;
-            font-size: 2rem;
-            color: #4e54c8;
-            text-align: center;
-        }
+form {
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 90px;
+    border: 1px solid #ddd;
+    margin-top: 3rem;
+}
 
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
+form h2 {
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    color: #4e54c8;
+    text-align: center;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
 
-        label {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input, select {
-            padding: 12px;
-            font-size: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        input:focus, select:focus {
-            border-color: #4e54c8;
-            box-shadow: 0 0 8px rgba(78, 84, 200, 0.2);
-        }
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
 
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            font-size: 1rem;
-            color: #fff;
-            background: linear-gradient(135deg, #4e54c8, #8f94fb);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-            font-weight: bold;
-        }
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #3c42a0, #6a71e5);
-            box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
-        }
-        .close {
-            text-align: center;
-            margin-top: 20px;
-        }
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        .back-btn {
-            display: inline-block;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(135deg, #4e54c8, #8f94fb);
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
-        }
+label {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
 
-        .back-btn:hover {
-            background: linear-gradient(135deg, #3c42a0, #6a71e5);
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
-        }
+input, select {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
+input:focus, select:focus {
+    border-color: #4e54c8;
+    box-shadow: 0 0 8px rgba(78, 84, 200, 0.2);
+}
 
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-            }
-        }
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: #fff;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #3c42a0, #6a71e5);
+    box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+}
+
+.close {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.back-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #3c42a0, #6a71e5);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(78, 84, 200, 0.4);
+}
+
+/* Styling for the file input */
+input[type="file"] {
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    background-color: #f7f7f7;
+}
+
+input[type="file"]:focus {
+    border-color: #4e54c8;
+    box-shadow: 0 0 8px rgba(78, 84, 200, 0.2);
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    background: #4e54c8;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    border: none;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #3c42a0;
+    box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+}
+
+input[type="file"]::-webkit-file-upload-button:focus {
+    outline: none;
+    border: none;
+}
+
+input[type="file"]:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.col-md-12 {
+    margin-bottom: 20px;
+}
+
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
+<nav class="navbar">
         <div class="nav-container">
             <span class="nav-title">Registration Form</span>
             <a href="login.php" class="nav-link">Back to Login</a>
         </div>
     </nav>
 
-    <?php $newconnection->userRegistration(); ?>
-
-    <form action="" method="post" class="userinfo">
+    <form action="" method="post" class="userinfo" enctype="multipart/form-data">
         <h2>User Registration</h2>
-        <!-- Row 1: First Name and Last Name -->
+
         <div class="form-row">
             <div class="form-group">
                 <label for="firstname">First Name</label>
@@ -216,8 +284,14 @@
                 <input type="password" id="password" name="password" placeholder="Choose a password" required>
             </div>
         </div>
+
+        <div class="form-group">
+            <label for="profile_image">Profile Image</label>
+            <input type="file" id="profile_image" name="profile_image" accept="image/*">
+        </div>
+
         <!-- Submit Button -->
         <button type="submit" class="submit-btn" name="register">Register</button>
     </form>
-</>
+    </body>
 </html>

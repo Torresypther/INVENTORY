@@ -1,7 +1,22 @@
 <?php 
-    require_once('db_conn.php');  
-    // Tawag sa getCategories na function
-    $categories = $newconnection->getCategories();  
+session_start();
+
+if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'customer') {
+
+    } else {
+        header("Location: unauthorized.php");
+        exit();
+    }
+} else {
+
+    header("Location: login.php");
+    exit();
+}
+
+require_once('db_conn.php');  
+$categories = $newconnection->getCategories();  
+
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +78,7 @@
 
         <div class="col-md-12">
             <label for="image" class="form-label">Product Image</label>
-            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+            <input type="file" class="form-control" id="userimage" name="userimage" accept="image/*">
         </div>
 
         <div class="col-12">

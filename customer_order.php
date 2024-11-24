@@ -5,7 +5,7 @@ $connection = $newconnection->openConnection();
 session_start();
 
 if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
-    if ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'customer') {
+    if ($_SESSION['role'] === 'admin') {
         $sql = "SELECT * FROM customer_order ORDER BY order_date DESC";
         $stmt = $connection->prepare($sql);
         $stmt->execute();
