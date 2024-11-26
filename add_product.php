@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
-    if ($_SESSION['role'] === 'customer') {
+    if ($_SESSION['role'] === 'admin') {
 
     } else {
         header("Location: unauthorized.php");

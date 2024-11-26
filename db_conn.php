@@ -70,8 +70,6 @@ class Connection
         }
     }
 }
-
-
     // add ug bag-ong category
     public function addCategory()
     {
@@ -220,31 +218,45 @@ class Connection
     }
 
     public function addCart()
-    {
-        if (isset($_POST['addtocart_btn'])) {
-    
-            $product_id = $_POST['product_id'];
-            $product_image = $_POST['product_image'];
-            $product_name = $_POST['product_name'];
-            $quantity = $_POST['quantity'];
-            $price = $_POST['price'];
-            $totalpayable = $quantity * $price;
-    
-            try {
+{
+    if (isset($_POST['addtocart_btn'])) {
+        $user_id = $_POST['user_id'];
+        $product_id = $_POST['product_id'];
+        $product_image = $_POST['product_image'];
+        $product_name = $_POST['product_name'];
+        $quantity = $_POST['quantity'];
+        $price = $_POST['price'];
+        $totalpayable = $quantity * $price;
 
-                $connection = $this->openConnection();
-    
-                $query = "INSERT INTO customer_cart (product_id, product_name, product_image, quantity, product_price, payable) VALUES (?,?,?,?,?,?)";
-                $stmt = $connection->prepare($query);
-                $stmt->execute([$product_id, $product_name, $product_image, $quantity, $price, $totalpayable]);
-    
-                header("Location: customer_feed.php?msg=added");
-                exit();
-            } catch (PDOException $th) {
-                echo "Error: " . $th->getMessage();
+        try {
+            $connection = $this->openConnection();
+
+            $query = "SELECT quantity FROM customer_cart WHERE user_id = ? AND product_id = ?";
+            $stmt = $connection->prepare($query);
+            $stmt->execute([$user_id, $product_id]);
+            $existingProduct = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingProduct) {
+                $newQuantity = $existingProduct['quantity'] + $quantity;
+                $newPayable = $newQuantity * $price;
+
+                $updateQuery = "UPDATE customer_cart SET quantity = ?, payable = ? WHERE user_id = ? AND product_id = ?";
+                $updateStmt = $connection->prepare($updateQuery);
+                $updateStmt->execute([$newQuantity, $newPayable, $user_id, $product_id]);
+            } else {
+
+                $insertQuery = "INSERT INTO customer_cart (user_id, product_id, product_name, product_image, quantity, product_price, payable) VALUES (?,?,?,?,?,?,?)";
+                $insertStmt = $connection->prepare($insertQuery);
+                $insertStmt->execute([$user_id, $product_id, $product_name, $product_image, $quantity, $price, $totalpayable]);
             }
+
+            header("Location: customer_feed.php?msg=added");
+            exit();
+        } catch (PDOException $th) {
+            echo "Error: " . $th->getMessage();
         }
     }
+}
 
     public function getItems()
     { 
@@ -264,22 +276,22 @@ class Connection
         }
     }
 
-    public function getCartItems(){
-        {
-            try{
-                $connection = $this->openConnection();
-                $query = "SELECT * FROM customer_cart";
-                $stmt = $connection->prepare($query);
-                $stmt->execute();
-
-                $items = $stmt->fetchAll();
-
-                return $items;
-            }catch(PDOException $th){
-                echo "Error: " . $th->getMessage();
-            }
+    public function getCartItems($userId) {
+        try {
+            $connection = $this->openConnection();
+            $query = "SELECT * FROM customer_cart WHERE user_id = :user_id";
+            $stmt = $connection->prepare($query);
+            $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            // Fetch all items as an associative array or objects
+            $cartItems = $stmt->fetchAll(PDO::FETCH_OBJ); // Using PDO::FETCH_OBJ to fetch as objects
+            return $cartItems;
+        } catch (PDOException $e) {
+            error_log($e->getMessage());
+            echo "An error occurred while retrieving cart items. Please try again later.";
         }
-    }
+    }    
 
     public function deleteCartProduct()
     {
@@ -303,82 +315,21 @@ class Connection
         }
     }
 
-    public function checkOut(){
-        if (isset($_POST['checkout_item'])) {
-            $cartProductId = $_POST['cartproduct_id'];
-        
-            $query = "SELECT * FROM customer_cart WHERE cart_product_id = :cart_product_id";
-            $stmt = $this->con->prepare($query);
-            $stmt->bindParam(':cart_product_id', $cartProductId, PDO::PARAM_INT);
+    public function getCartTotal() {
+        try {
+            $connection = $this->openConnection();
+            $query = "SELECT SUM(payable) AS total FROM customer_cart";
+            $stmt = $connection->prepare($query);
             $stmt->execute();
-        
-            $cartItem = $stmt->fetch(PDO::FETCH_OBJ);
-        
-            if ($cartItem) {
-                $productId = $cartItem->product_id;
-                $productName = $cartItem->product_name;
-                $productImage = $cartItem->product_image;
-                $quantity = $cartItem->quantity;
-                $productPrice = $cartItem->product_price;
-                $payable = $cartItem->payable;
-        
-                $totalPayable = $payable * $quantity;
-        
-                // Check if there's enough stock for the product
-                $stockQuery = "SELECT stocks_left FROM product_table WHERE product_id = :product_id";
-                $stockStmt = $this->con->prepare($stockQuery);
-                $stockStmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
-                $stockStmt->execute();
-                $stock = $stockStmt->fetch(PDO::FETCH_OBJ);
-        
-                if ($stock && $stock->stocks_left >= $quantity) {
-                    
-                    $this->con->beginTransaction();
-        
-                    try {
-                        $orderDate = date('Y-m-d H:i:s');
-        
-                        $insertQuery = "INSERT INTO customer_order (cart_product_id, product_image, product_name, quantity, product_price, total_payable, order_date)
-                                        VALUES (:cart_product_id, :product_image, :product_name, :quantity, :product_price, :total_payable, :order_date)";
-                        $insertStmt = $this->con->prepare($insertQuery);
-                        $insertStmt->bindParam(':cart_product_id', $cartProductId, PDO::PARAM_INT);
-                        $insertStmt->bindParam(':product_image', $productImage, PDO::PARAM_STR);
-                        $insertStmt->bindParam(':product_name', $productName, PDO::PARAM_STR);
-                        $insertStmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-                        $insertStmt->bindParam(':product_price', $productPrice, PDO::PARAM_STR);
-                        $insertStmt->bindParam(':total_payable', $totalPayable, PDO::PARAM_STR);
-                        $insertStmt->bindParam(':order_date', $orderDate, PDO::PARAM_STR);
-                        $insertStmt->execute();
-        
-                        $deleteQuery = "DELETE FROM customer_cart WHERE cart_product_id = :cart_product_id";
-                        $deleteStmt = $this->con->prepare($deleteQuery);
-                        $deleteStmt->bindParam(':cart_product_id', $cartProductId, PDO::PARAM_INT);
-                        $deleteStmt->execute();
-        
-                        $updateStockQuery = "UPDATE product_table SET stocks_left = stocks_left - :quantity WHERE product_id = :product_id";
-                        $updateStockStmt = $this->con->prepare($updateStockQuery);
-                        $updateStockStmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
-                        $updateStockStmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
-                        $updateStockStmt->execute();
-        
-                        $this->con->commit();
-        
-                        header("Location: customer_cart.php?msg=Item successfully checked out!");
-
-                    } catch (Exception $e) {
-
-                        $this->con->rollBack();
-                        header("Location: customer_cart.php?msg=Item was not checked out due to problems!");
-                    }
-                } else {
-                    header("Location: customer_cart.php?msg=Insufficient stock!");
-                }
-            } else {
-                header("Location: customer_cart.php?msg=Item was not found in the cart.");
-            }
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return 0;
         }
     }
-    
     
     
 }

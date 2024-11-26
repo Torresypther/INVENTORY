@@ -1,7 +1,10 @@
 <?php
 session_start();
+require_once 'db_conn.php';
 
-if (isset($_SESSION['username']) && isset($_SESSION['role']) && isset($_SESSION['user_image'])) {
+if (isset($_SESSION['username'])  && isset($_SESSION['role'])
+&& isset($_SESSION['user_image']) && isset($_SESSION['user_id'])) {
+
     if ($_SESSION['role'] === 'customer') {
 
     } else {
@@ -13,16 +16,15 @@ if (isset($_SESSION['username']) && isset($_SESSION['role']) && isset($_SESSION[
     exit();
 }
 
-require_once 'db_conn.php';
+$username = $_SESSION['username'];
+$user_image = $_SESSION['user_image'];
+$user_id = $_SESSION['user_id'];
 
 $connection = $newconnection->openConnection();
 $newconnection->addCart();
 $result = $newconnection->getItems();
-$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 
-$username = $_SESSION['username'];
-$role = $_SESSION['role'];
-$user_image = $_SESSION['user_image'];
+$msg = isset($_GET['msg']) ? $_GET['msg'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -284,7 +286,6 @@ $user_image = $_SESSION['user_image'];
             <img src="<?php echo $user_image; ?>" alt="Profile Picture" class="profile-img" />
         </div>
         <p><strong>Username:</strong> <?php echo $username; ?></p>
-        <p><strong>Role:</strong> <?php echo $role; ?></p>
     </div>
 
 
@@ -318,6 +319,7 @@ $user_image = $_SESSION['user_image'];
                             <input type="hidden" name="product_name" value="<?php echo $row->product_name; ?>">
                             <input type="hidden" name="price" value="<?php echo $row->product_price; ?>">
                             <input type="hidden" name="product_id" value="<?php echo $row->product_id; ?>">
+                            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
 
                             <button type="submit" name="addtocart_btn" class="btn-add-to-cart">Add to Cart</button>
                         </form>

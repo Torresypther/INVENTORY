@@ -1,6 +1,6 @@
 <?php
-include "connection.php";
 session_start();
+include "connection.php";
 
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
@@ -13,8 +13,9 @@ if (isset($_POST['submit'])) {
     if ($result) {
 
         $_SESSION['username'] = $result["username"];
-        $_SESSION['role'] = $result["role"];
         $_SESSION['user_image'] = $result['user_image']; 
+        $_SESSION['user_id'] = $result['user_id'];
+        $_SESSION['role'] = $result['role'];
 
         if ($result["role"] === "admin") {
             header("Location: index.php");
