@@ -19,14 +19,13 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
     exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"> <!-- Corrected Bootstrap Icons link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -55,23 +54,6 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
             letter-spacing: 1px;
         }
 
-        .navbar .icons {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .navbar .icons div {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 1.1rem;
-        }
-
-        .navbar .icons span {
-            font-size: 1.3rem;
-        }
-
         .navbar a {
             text-decoration: none;
             color: white;
@@ -81,17 +63,6 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         }
 
         .navbar a:hover {
-            color: #00b0ff;
-        }
-
-        .navbar ul {
-            list-style-type: none;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .navbar ul li:hover,
-        .navbar .icons div:hover {
             color: #00b0ff;
         }
 
@@ -120,68 +91,64 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
             background-color: #00b0ff;
         }
 
-        .btnButtons {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .button-container a {
-            background-color: #1a3a5a;
-            padding: 0.75rem 2rem;
-            border-radius: 4px;
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .button-container a:hover {
-            background-color: #004c74;
-        }
-
-        .footer-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #ffffff;
-            border-top: 1px solid #ddd;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-            padding: 0.75rem 2rem;
+        .action-buttons {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
+            justify-content: center;
+            gap: 0.75rem; 
         }
 
-        .back-btn {
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+
+        .btn.shipped {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn.shipped:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn.cancelled {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn.cancelled:hover {
+            background-color: #c82333;
+            transform: translateY(-2px); 
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        }
+
+        .button-container2 {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .back-btn:hover {
-            color: #00b0ff;
+            justify-content: center;
+            gap: 1rem;
         }
 
     </style>
+
     <title>View Customer Orders</title>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="logo">CUSTOMER ORDERS</div>
-    <div class="icons">
-        <a href="javascript:history.back()" class="back-btn">
-            <i class="bi bi-arrow-left"></i> Back
-        </a>
-    </div>
+    <a href="javascript:history.back()" class="back-btn">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
 </nav>
 
 <div class="container">
@@ -190,33 +157,57 @@ if (isset($_SESSION['username']) && isset($_SESSION['role'])) {
         <thead>
             <tr>
                 <th scope="col">Order ID</th>
-                <th scope="col">Product Name</th>
+                <th scope="col">Product Ordered</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total Payable</th>
                 <th scope="col">Order Date</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            if ($orders) {
+            if ($orders) { 
                 foreach ($orders as $order) {
-                    echo "<tr>";
-                    echo "<td>" . htmlspecialchars($order->order_id) . "</td>";
-                    echo "<td>" . htmlspecialchars($order->product_name) . "</td>";
-                    echo "<td>" . htmlspecialchars($order->quantity) . "</td>";
-                    echo "<td>" . htmlspecialchars(number_format($order->total_payable, 2)) . "</td>";
-                    echo "<td>" . htmlspecialchars($order->order_date) . "</td>";
-                    echo "</tr>";
+            ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($order->order_id); ?></td>
+                        <td><?php echo htmlspecialchars($order->product_name); ?></td>
+                        <td><?php echo htmlspecialchars($order->quantity); ?></td>
+                        <td><?php echo htmlspecialchars(number_format($order->total_payable, 2)); ?></td>
+                        <td><?php echo htmlspecialchars($order->order_date); ?></td>
+                        <td>
+                            <div class="button-container2">
+                                <form action="#" method="POST" style="display:inline;">
+                                    <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order->order_id); ?>">
+                                    <input type="hidden" name="status" value="shipped">
+                                    <button class="btn shipped btn-success btn-sm" type="submit"
+                                        style="display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa-solid fa-truck fs-5 me-3"></i>Shipped Out
+                                    </button>
+                                </form>
+
+                                <form action="#" method="POST" style="display:inline;">
+                                    <input type="hidden" name="order_id" value="<?php echo htmlspecialchars($order->order_id); ?>">
+                                    <input type="hidden" name="status" value="cancelled">
+                                    <button class="btn cancelled btn-danger btn-sm" type="submit"
+                                        style="display: flex; align-items: center; justify-content: center;">
+                                        <i class="fa-solid fa-times-circle fs-5 me-3"></i>Cancelled
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+            <?php
                 }
-            } else {
-                echo "<tr><td colspan='5'>No orders found.</td></tr>";
+            } else { 
+                echo '<tr><td colspan="6">No orders found.</td></tr>';
             }
             ?>
         </tbody>
+
     </table>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

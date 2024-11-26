@@ -25,8 +25,52 @@ $categories = $newconnection->getCategories();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="add_product.css">
     <title>Add New Product</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #F3F7F0;
+        }
+
+        .nav_bar {
+            background-color: #19323C;
+            color: #F3F7F0; 
+            padding: 15px;
+            text-align: center; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        .form-container{
+            margin-left: 4rem;
+            margin-right: 4rem;
+        }
+
+        .form-control, .form-select{
+            line-height: 2.2rem;
+        }
+
+        .btnadd, .btncancel{
+            margin-top: .5rem;
+            padding: 10px 20px;
+            border-radius: 10px;
+            height: 45px;
+            border-style: none;
+            color: #f3f7f0;
+        }
+        .btnadd{
+            background-color: #04ae59;
+        }
+
+        .btnadd:hover{
+            background-color: #328757;
+        }
+    </style>
 </head>
 <body>
 

@@ -20,16 +20,9 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #f78ca0, #f6d365, #4e54c8, #8f94fb);
-            background-size: 300% 300%;
-            animation: gradient-animation 6s ease infinite;
+            background: linear-gradient(135deg, #ffa500, #1e90ff);
             font-family: Arial, sans-serif;
             color: #333;
-        }
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         .login-container {
             background-color: #fff;
